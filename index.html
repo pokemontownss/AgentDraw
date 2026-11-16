@@ -1,0 +1,1564 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="description" content="AgentDraw — your AI agent draws pixel art live, pixel by pixel. The result becomes your NFT + 1,000 $DRAW. Free draws for Binance Agent ID holders, instant draws on BNB Chain." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%231B1930'/%3E%3Crect x='3' y='4' width='10' height='9' fill='%2300C2A8'/%3E%3Crect x='5' y='7' width='2' height='2' fill='%231B1930'/%3E%3Crect x='9' y='7' width='2' height='2' fill='%231B1930'/%3E%3Crect x='6' y='10' width='4' height='1' fill='%231B1930'/%3E%3Crect x='12' y='1' width='2' height='2' fill='%23FFC91F'/%3E%3C/svg%3E" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AgentDraw" />
+    <meta property="og:title" content="AgentDraw — Drawn by Agents. Owned by You." />
+    <meta property="og:description" content="An AI agent draws original pixel art live, pixel by pixel — the result becomes your NFT + 1,000 $DRAW. Free draws for Binance Agent ID holders, Instant Draws on BNB Chain. 1,444 pieces, ever." />
+    <meta property="og:url" content="https://agentdraw.click/" />
+<meta property="og:image" content="https://agentdraw.click/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="AgentDraw — Drawn by Agents. Owned by You." />
+    <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://agentdraw.click/og-image.png" />
+    <meta name="twitter:title" content="AgentDraw — Drawn by Agents. Owned by You." />
+    <meta name="twitter:description" content="Your agent draws it. You own it. Free draws for Binance Agent ID holders — Instant Draw 0.0012 BNB on BNB Chain." />
+    <title>AgentDraw — Drawn by Agents. Owned by You.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root{
+        --paper:#FFF6DE; --paper2:#FFEFBE; --card:#FFFDF4;
+        --ink:#1B1930; --ink-soft:#4A4763;
+        --coral:#FF5D47; --coral-d:#E8442F;
+        --sun:#FFC91F; --teal:#00C2A8; --blue:#3A86FF; --pink:#FF70A6; --purple:#8338EC;
+        --dark:#16142A; --dark2:#221F3D; --dark3:#2C2850;
+        --line:3px solid var(--ink);
+        --sh:6px 6px 0 var(--ink);
+        --sh-sm:4px 4px 0 var(--ink);
+        --px:'Press Start 2P',monospace;
+        --body:'Space Grotesk',system-ui,sans-serif;
+        --mono:'Space Mono',ui-monospace,monospace;
+      }
+      *{ box-sizing:border-box; }
+      html{ scroll-behavior:smooth; }
+      body{
+        margin:0; font-family:var(--body); color:var(--ink); line-height:1.55;
+        background-color:var(--paper);
+        background-image:
+          linear-gradient(rgba(27,25,48,.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(27,25,48,.05) 1px, transparent 1px),
+          linear-gradient(rgba(27,25,48,.09) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(27,25,48,.09) 1px, transparent 1px);
+        background-size:28px 28px, 28px 28px, 140px 140px, 140px 140px;
+        overflow-x:hidden;
+      }
+      ::selection{ background:var(--sun); color:var(--ink); }
+      img,canvas{ image-rendering:pixelated; }
+      a{ color:inherit; }
+      .wrap{ max-width:1180px; margin:0 auto; padding:0 20px; }
+      .px{ font-family:var(--px); }
+      .mono{ font-family:var(--mono); }
+
+      /* ---------- header ---------- */
+      header.site{
+        position:sticky; top:0; z-index:60;
+        background:var(--paper);
+        border-bottom:var(--line);
+      }
+      .head-in{ display:flex; align-items:center; gap:18px; padding:10px 0; flex-wrap:wrap; }
+      .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; min-height:48px; }
+      .brand .logo-box{
+        width:52px; height:52px; flex:0 0 52px; background:var(--card);
+        border:var(--line); box-shadow:var(--sh-sm); display:grid; place-items:center;
+      }
+      .brand .logo-box canvas{ width:44px; height:44px; }
+      .brand-name{ font-family:var(--px); font-size:17px; letter-spacing:.5px; line-height:1; }
+      .brand-name .dot{ color:var(--coral); }
+      .brand-sub{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); margin-top:5px; letter-spacing:.4px; }
+      nav.main{ display:flex; gap:4px; flex-wrap:wrap; margin-left:auto; }
+      nav.main a{
+        font-family:var(--px); font-size:9px; text-decoration:none; padding:12px 10px;
+        min-height:40px; display:inline-flex; align-items:center; border:3px solid transparent;
+      }
+      nav.main a:hover{ border-color:var(--ink); background:var(--sun); box-shadow:3px 3px 0 var(--ink); }
+      .btn{
+        font-family:var(--px); font-size:11px; cursor:pointer; text-decoration:none;
+        border:var(--line); box-shadow:var(--sh-sm); padding:0 18px; min-height:46px;
+        display:inline-flex; align-items:center; justify-content:center; gap:10px;
+        background:var(--card); color:var(--ink); transition:transform .06s, box-shadow .06s;
+        text-align:center; line-height:1.5;
+      }
+      .btn:hover{ transform:translate(-1px,-1px); box-shadow:5px 5px 0 var(--ink); }
+      .btn:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 var(--ink); }
+      .btn.coral{ background:var(--coral); color:#fff; }
+      .btn.sun{ background:var(--sun); }
+      .btn.teal{ background:var(--teal); color:#fff; }
+      .btn.ink{ background:var(--ink); color:var(--paper); }
+      .btn:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
+      .btn.small{ font-size:9px; min-height:38px; padding:0 12px; }
+      #connectBtn.connected{ background:var(--teal); color:#fff; font-family:var(--mono); font-size:12px; }
+
+      /* ---------- hero ---------- */
+      .hero{ position:relative; padding:56px 0 10px; overflow:hidden; }
+      .doodle{ position:absolute; opacity:.9; pointer-events:none; animation:floaty 5s ease-in-out infinite; }
+      @keyframes floaty{ 0%,100%{ transform:translateY(0) rotate(-3deg);} 50%{ transform:translateY(-12px) rotate(3deg);} }
+      .badge{
+        display:inline-flex; align-items:center; gap:10px; font-family:var(--px); font-size:10px;
+        background:var(--ink); color:var(--sun); border:var(--line); box-shadow:var(--sh-sm);
+        padding:10px 14px; min-height:38px;
+      }
+      .badge .rec{ width:9px; height:9px; background:var(--coral); animation:blink 1.1s steps(2) infinite; }
+      @keyframes blink{ 50%{ opacity:.15; } }
+      h1.hero-title{
+        font-family:var(--px); font-size:clamp(26px,5.4vw,52px); line-height:1.35; margin:26px 0 6px;
+        max-width:15ch; text-shadow:4px 4px 0 rgba(27,25,48,.14);
+      }
+      h1.hero-title .hl-c{ color:var(--coral); } h1.hero-title .hl-t{ color:var(--teal); }
+      .hero-tag{ font-family:var(--px); font-size:clamp(11px,2vw,15px); color:var(--blue); margin:14px 0 8px; letter-spacing:1px; }
+      .hero-sub{ font-size:18px; max-width:56ch; color:var(--ink-soft); font-weight:500; }
+      .hero-sub b{ color:var(--ink); }
+      .hero-ctas{ display:flex; gap:16px; flex-wrap:wrap; margin:28px 0 34px; }
+      .hero-ctas .btn{ font-size:12px; min-height:56px; padding:0 24px; box-shadow:var(--sh); flex-direction:column; gap:2px; align-items:flex-start; }
+      .hero-ctas .btn small{ font-family:var(--mono); font-size:11px; font-weight:400; opacity:.85; letter-spacing:.3px; }
+      .stat-row{ display:grid; grid-template-columns:repeat(3,1fr); border:var(--line); background:var(--card); box-shadow:var(--sh); }
+      .stat{ padding:16px 18px; }
+      .stat + .stat{ border-left:var(--line); }
+      .stat .k{ font-family:var(--px); font-size:8px; color:var(--ink-soft); letter-spacing:1px; }
+      .stat .v{ font-family:var(--mono); font-weight:700; font-size:clamp(20px,3.4vw,30px); margin-top:8px; }
+      .stat .v.coral{ color:var(--coral-d); } .stat .v.teal{ color:#00937E; }
+      .stat .s{ font-family:var(--mono); font-size:12px; color:var(--ink-soft); }
+      .progress{ margin-top:18px; }
+      .progress .track{ height:22px; border:var(--line); background:var(--card); box-shadow:var(--sh-sm); display:flex; overflow:hidden; }
+      .progress .fill{ background:repeating-linear-gradient(90deg, var(--coral) 0 14px, var(--sun) 14px 28px); height:100%; transition:width .8s steps(12); }
+      .progress .lbl{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:12px; margin-top:8px; color:var(--ink-soft); flex-wrap:wrap; gap:6px; }
+      .pool-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+      .pool-box{ border:var(--line); background:var(--card); box-shadow:var(--sh-sm); padding:12px 14px; }
+      .pool-box .k{ font-family:var(--px); font-size:8px; color:var(--ink-soft); letter-spacing:1px; }
+      .pool-box .v{ font-family:var(--mono); font-weight:700; font-size:18px; margin-top:6px; }
+      .pool-box .track{ height:12px; border:2px solid var(--ink); background:var(--paper); margin-top:8px; overflow:hidden; }
+      .pool-box .fill{ height:100%; }
+      .pool-box .fill.free{ background:var(--teal); } .pool-box .fill.paid{ background:var(--coral); }
+      @media (max-width:620px){ .pool-row{ grid-template-columns:1fr; } }
+
+      /* ---------- ticker ---------- */
+      .ticker{ margin-top:34px; background:var(--ink); color:var(--paper); border-top:var(--line); border-bottom:var(--line); display:flex; align-items:stretch; min-height:46px; }
+      .ticker .live{ background:var(--coral); color:#fff; font-family:var(--px); font-size:10px; display:flex; align-items:center; padding:0 16px; gap:8px; flex:0 0 auto; }
+      .ticker .live i{ width:8px; height:8px; background:#fff; animation:blink 1s steps(2) infinite; }
+      .ticker .msg{ display:block; flex:1; min-width:0; padding:13px 18px; font-family:var(--mono); font-size:13.5px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; animation:slidein .35s steps(6); }
+      @keyframes slidein{ from{ transform:translateX(14px); opacity:0;} to{ transform:none; opacity:1;} }
+      .ticker .msg b{ color:var(--sun); }
+
+      /* ---------- steps ---------- */
+      section{ padding:64px 0 8px; }
+      .sec-head{ display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
+      .sec-head h2{ font-family:var(--px); font-size:clamp(17px,3vw,24px); margin:0; line-height:1.5; }
+      .sec-head .no{ font-family:var(--px); font-size:11px; background:var(--sun); border:var(--line); box-shadow:3px 3px 0 var(--ink); padding:7px 9px; }
+      .sec-sub{ color:var(--ink-soft); font-size:16.5px; max-width:64ch; margin:6px 0 26px; font-weight:500; }
+      .steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+      .step{ background:var(--card); border:var(--line); box-shadow:var(--sh); padding:22px; }
+      .step .num{ font-family:var(--px); font-size:22px; color:var(--paper); -webkit-text-stroke:2px var(--ink); text-shadow:3px 3px 0 var(--ink); }
+      .step h3{ font-family:var(--px); font-size:13px; margin:16px 0 10px; }
+      .step p{ margin:0; color:var(--ink-soft); font-weight:500; }
+      .step.c1 h3{ color:var(--coral-d);} .step.c2 h3{ color:#00937E;} .step.c3 h3{ color:var(--blue);}
+
+      /* ---------- canvas studio ---------- */
+      .studio{ background:var(--dark); color:#EDEAF6; border:var(--line); box-shadow:8px 8px 0 var(--ink); padding:26px; position:relative; }
+      .studio::before{ content:""; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,.07) 1.5px, transparent 1.6px); background-size:22px 22px; pointer-events:none; }
+      .studio-grid{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:28px; position:relative; }
+      .canvas-frame{ background:var(--dark2); border:3px solid #000; box-shadow:6px 6px 0 rgba(0,0,0,.55); padding:14px; }
+      .canvas-top{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+      .status-chip{ font-family:var(--px); font-size:9px; padding:9px 11px; border:3px solid #000; background:var(--dark3); color:#B9B4D8; display:inline-flex; gap:8px; align-items:center; min-height:36px; }
+      .status-chip .dot{ width:9px; height:9px; background:#6E6890; }
+      .status-chip.on{ color:#fff; } .status-chip.on .dot{ background:var(--teal); animation:blink 0.7s steps(2) infinite; }
+      .status-chip.done .dot{ background:var(--sun); animation:none; }
+      .canvas-holder{ position:relative; background:#0D0B1C; border:3px solid #000; }
+      #stage{ display:block; width:100%; height:auto; }
+      #cellCursor{ position:absolute; border:3px solid var(--sun); pointer-events:none; display:none; z-index:3; }
+      .reveal-banner{
+        position:absolute; left:50%; bottom:14px; transform:translateX(-50%); z-index:4; display:none;
+        background:var(--sun); color:var(--ink); border:var(--line); box-shadow:var(--sh-sm);
+        font-family:var(--px); font-size:10px; padding:12px 14px; text-align:center; line-height:1.9; width:max-content; max-width:92%;
+      }
+      .reveal-banner.show{ display:block; animation:pop .3s steps(4); }
+      @keyframes pop{ from{ transform:translateX(-50%) scale(.8);} to{ transform:translateX(-50%) scale(1);} }
+      .readouts{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:14px; }
+      .ro{ background:var(--dark2); border:3px solid #000; padding:10px 12px; }
+      .ro .k{ font-family:var(--px); font-size:7px; color:#9B95C4; letter-spacing:.5px; }
+      .ro .v{ font-family:var(--mono); font-weight:700; font-size:17px; margin-top:6px; color:#fff; }
+      .palette-row{ display:flex; align-items:center; gap:8px; margin-top:14px; flex-wrap:wrap; }
+      .palette-row .k{ font-family:var(--px); font-size:8px; color:#9B95C4; margin-right:2px; }
+      .sw{ width:22px; height:22px; border:3px solid #000; box-shadow:2px 2px 0 rgba(0,0,0,.5); }
+      .studio h3.panel-t{ font-family:var(--px); font-size:12px; margin:2px 0 14px; color:#fff; line-height:1.7; }
+      .checks{ display:flex; flex-direction:column; gap:9px; margin-bottom:18px; }
+      .check{ display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:13px; background:var(--dark2); border:3px solid #000; padding:9px 12px; min-height:42px; }
+      .check .lamp{ width:12px; height:12px; border:2px solid #000; background:#57527A; flex:0 0 12px; }
+      .check.ok .lamp{ background:var(--teal); }
+      .check.warn .lamp{ background:var(--sun); }
+      .check .right{ margin-left:auto; color:#B9B4D8; font-size:12px; text-align:right; }
+      .check.ok .right{ color:var(--teal); } .check.warn .right{ color:var(--sun); }
+      .check.bad .lamp{ background:var(--coral); }
+      .check.bad .right{ color:#FF9C8A; }
+      .style-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+      .chip{
+        font-family:var(--px); font-size:8.5px; border:3px solid #000; background:var(--dark3); color:#CFC9EC;
+        padding:0 12px; min-height:38px; cursor:pointer; box-shadow:3px 3px 0 rgba(0,0,0,.5);
+      }
+      .chip.sel{ background:var(--sun); color:var(--ink); }
+      .chip:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.5); }
+      .prompt-in{
+        width:100%; background:#0D0B1C; border:3px solid #000; color:#fff; font-family:var(--mono);
+        font-size:14px; padding:12px; min-height:48px; margin-bottom:12px;
+      }
+      .prompt-in::placeholder{ color:#6E6890; }
+      .studio .btn{ width:100%; }
+      .queue-note{ font-family:var(--mono); font-size:12.5px; color:#B9B4D8; margin-top:12px; min-height:20px; }
+      .queue-note b{ color:var(--sun); }
+      .agent-check{ margin:2px 0 18px; background:var(--dark2); border:3px solid #000; padding:14px; }
+      .ac-row{ display:flex; gap:10px; align-items:stretch; }
+      .ac-row .prompt-in{ margin-bottom:0; flex:1 1 auto; min-width:0; }
+      .ac-row .btn{ width:auto; flex:0 0 auto; }
+      .ac-result{ font-family:var(--mono); font-size:12.5px; color:#B9B4D8; margin:10px 0 0; min-height:18px; overflow-wrap:anywhere; }
+      .ac-result b{ color:#fff; }
+      .ac-result.good{ color:var(--teal); } .ac-result.good b{ color:var(--teal); }
+      .ac-result.bad{ color:#FF9C8A; } .ac-result.bad b{ color:#FF9C8A; }
+      .agent-cards{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:22px; position:relative; }
+      .agent-card{ background:var(--card); color:var(--ink); border:var(--line); box-shadow:var(--sh-sm); padding:16px; }
+      .agent-card h4{ font-family:var(--px); font-size:9.5px; margin:0 0 10px; line-height:1.7; }
+      .agent-card h4.free{ color:#00937E; } .agent-card h4.paid{ color:var(--coral-d); }
+      .agent-card p{ font-family:var(--mono); font-size:12px; margin:0 0 12px; color:var(--ink-soft); overflow-wrap:anywhere; }
+      .agent-card .btn{ width:auto; }
+
+      /* ---------- instant ---------- */
+      .instant-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); gap:20px; align-items:start; }
+      .price-card{ background:var(--card); border:var(--line); box-shadow:var(--sh); padding:24px; }
+      .price-card .big{ font-family:var(--mono); font-weight:700; font-size:40px; margin:6px 0 2px; }
+      .price-card .big small{ font-size:16px; color:var(--ink-soft); }
+      .kv{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:2px dashed rgba(27,25,48,.25); font-family:var(--mono); font-size:14px; flex-wrap:wrap; }
+      .kv b{ font-weight:700; }
+      .split-card{ background:var(--card); border:var(--line); box-shadow:var(--sh); padding:24px; }
+      .split-bar{ display:flex; height:34px; border:var(--line); overflow:hidden; margin:14px 0 16px; }
+      .split-bar div{ display:flex; align-items:center; justify-content:center; font-family:var(--px); font-size:9px; color:#fff; }
+      .split-bar .b50{ width:50%; background:var(--coral); } .split-bar .b30{ width:30%; background:var(--teal); } .split-bar .b20{ width:20%; background:var(--blue); }
+      .split-list{ display:flex; flex-direction:column; gap:10px; margin:0; padding:0; list-style:none; }
+      .split-list li{ display:flex; gap:10px; align-items:flex-start; font-weight:500; color:var(--ink-soft); }
+      .split-list .tag{ font-family:var(--px); font-size:8px; padding:6px 7px; border:2px solid var(--ink); color:var(--ink); flex:0 0 auto; margin-top:1px; }
+      .last-draws{ margin-top:20px; background:var(--ink); color:var(--paper); border:var(--line); box-shadow:var(--sh); padding:20px 22px; }
+      .last-draws h3{ font-family:var(--px); font-size:11px; margin:0 0 14px; color:var(--sun); }
+      .last-draws ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px; font-family:var(--mono); font-size:13px; }
+      .last-draws li{ display:flex; justify-content:space-between; gap:10px; border-bottom:1px dashed rgba(255,246,222,.25); padding-bottom:8px; flex-wrap:wrap; }
+      .tier-chip{ font-family:var(--px); font-size:7.5px; padding:5px 6px; border:2px solid currentColor; white-space:nowrap; }
+
+      /* ---------- my draws ---------- */
+      .mydraws-box{ background:var(--card); border:var(--line); box-shadow:var(--sh); padding:24px; }
+      .md-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+      .md-stat{ border:var(--line); padding:14px 16px; background:var(--paper); }
+      .md-stat .k{ font-family:var(--px); font-size:8px; color:var(--ink-soft); }
+      .md-stat .v{ font-family:var(--mono); font-weight:700; font-size:24px; margin-top:7px; }
+      .md-stat .v small{ font-size:12px; color:var(--ink-soft); }
+      .claim-row{ display:flex; gap:14px; align-items:stretch; flex-wrap:wrap; margin-bottom:20px; }
+      .claim-box{ flex:1 1 260px; border:var(--line); background:var(--sun); padding:14px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+      .claim-box .k{ font-family:var(--px); font-size:8px; }
+      .claim-box .v{ font-family:var(--mono); font-weight:700; font-size:22px; margin-top:5px; }
+      .empty-state{ border:3px dashed rgba(27,25,48,.4); padding:34px 20px; text-align:center; }
+      .empty-state .px{ font-size:12px; line-height:2; }
+      .empty-state p{ color:var(--ink-soft); font-weight:500; margin:10px 0 0; }
+      .my-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px; }
+      .mini-card{ border:var(--line); background:var(--paper); box-shadow:var(--sh-sm); padding:10px; }
+      .mini-card canvas{ width:100%; height:auto; display:block; border:2px solid var(--ink); }
+      .mini-card .nm{ font-family:var(--px); font-size:8px; margin-top:10px; line-height:1.7; }
+      .mini-card .mt{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin-top:5px; display:flex; justify-content:space-between; gap:6px; flex-wrap:wrap; }
+
+      /* ---------- gallery / hall ---------- */
+      .hall-stats{ display:grid; grid-template-columns:repeat(5,1fr); border:var(--line); background:var(--card); box-shadow:var(--sh); margin-bottom:20px; }
+      .hall-stats .stat .v{ font-size:clamp(16px,2.6vw,24px); }
+      .hall-grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.6fr); gap:20px; align-items:start; margin-bottom:26px; }
+      .board{ background:var(--ink); color:var(--paper); border:var(--line); box-shadow:var(--sh); padding:22px; }
+      .board h3{ font-family:var(--px); font-size:11px; color:var(--sun); margin:0 0 16px; }
+      .board table{ width:100%; border-collapse:collapse; font-family:var(--mono); font-size:13.5px; }
+      .board th{ font-family:var(--px); font-size:7.5px; text-align:left; color:#9B95C4; padding:0 6px 10px 0; }
+      .board td{ padding:8px 6px 8px 0; border-top:1px dashed rgba(255,246,222,.22); }
+      .board td:last-child,.board th:last-child{ text-align:right; padding-right:0; }
+      .board .rk{ color:var(--coral); font-weight:700; }
+      .pulls{ display:flex; flex-direction:column; gap:14px; }
+      .pull{ display:flex; gap:16px; background:var(--card); border:var(--line); box-shadow:var(--sh-sm); padding:14px; align-items:center; }
+      .pull canvas{ width:84px; height:84px; flex:0 0 84px; border:2px solid var(--ink); }
+      .pull .nm{ font-family:var(--px); font-size:10px; line-height:1.8; }
+      .pull .mt{ font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); margin-top:4px; }
+      .filters{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+      .filters .chip{ background:var(--card); color:var(--ink); border-color:var(--ink); box-shadow:3px 3px 0 var(--ink); }
+      .filters .chip.sel{ background:var(--ink); color:var(--sun); }
+      .gallery{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+      .art-card{ background:var(--card); border:var(--line); box-shadow:var(--sh); padding:12px; transition:transform .08s; }
+      .art-card:hover{ transform:translate(-2px,-2px); box-shadow:8px 8px 0 var(--ink); }
+      .art-card canvas{ width:100%; height:auto; display:block; border:2px solid var(--ink); }
+      .art-card .no{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin-top:12px; }
+      .art-card .nm{ font-family:var(--px); font-size:9.5px; line-height:1.8; margin-top:3px; }
+      .art-card .row{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap; }
+      .art-card .wt{ font-family:var(--mono); font-weight:700; font-size:13px; }
+
+      /* ---------- codex ---------- */
+      .codex{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+      .codex-card{ background:var(--card); border:var(--line); box-shadow:var(--sh); padding:20px; }
+      .codex-card .swrow{ display:flex; gap:6px; margin-bottom:14px; }
+      .codex-card .swrow i{ width:26px; height:26px; border:2px solid var(--ink); display:block; }
+      .codex-card h3{ font-family:var(--px); font-size:12px; margin:0 0 6px; }
+      .codex-card .wt{ font-family:var(--mono); font-weight:700; font-size:20px; }
+      .codex-card .odds{ font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); }
+      .codex-card p{ color:var(--ink-soft); font-weight:500; margin:10px 0 14px; }
+      .avail{ font-family:var(--px); font-size:7.5px; padding:7px 8px; border:2px solid var(--ink); display:inline-block; }
+      .avail.both{ background:var(--teal); color:#fff; } .avail.paid{ background:var(--sun); }
+
+      /* ---------- RARE — Prism Foil ---------- */
+      .rare-badge{
+        background:linear-gradient(90deg,#00E5FF,#8338EC,#FF4DFF); color:#fff; border:2px solid #1B1040;
+        text-shadow:0 1px 0 rgba(27,16,64,.5);
+      }
+      .dia{ position:absolute; width:9px; height:9px; background:linear-gradient(135deg,#FFFFFF,#00E5FF 55%,#FF4DFF); border:2px solid #EDEBFF; transform:rotate(45deg); z-index:2; pointer-events:none; }
+      .dia.d-tl{ top:5px; left:5px; } .dia.d-tr{ top:5px; right:5px; }
+      .dia.d-bl{ bottom:5px; left:5px; } .dia.d-br{ bottom:5px; right:5px; }
+      .art-card.rare-card{
+        position:relative; background:linear-gradient(155deg,#2A1660,#1B1040 60%,#33135C); color:#F2EFFF;
+        border-color:#1B1040; outline:2px solid #B9C8FF; outline-offset:-8px;
+        box-shadow:6px 6px 0 var(--ink), 10px 10px 0 rgba(131,56,236,.45);
+      }
+      .art-card.rare-card .no{ color:#B9B4D8; }
+      .art-card.rare-card .nm{ color:#fff; }
+      .art-card.rare-card .wt{ color:#7DF3FF; }
+      .art-card.rare-card canvas{ border-color:#B9C8FF; }
+      .mini-card.rare-card{
+        position:relative; background:linear-gradient(155deg,#2A1660,#1B1040 60%,#33135C); color:#F2EFFF;
+        border-color:#1B1040; outline:2px solid #B9C8FF; outline-offset:-7px;
+        box-shadow:4px 4px 0 var(--ink), 7px 7px 0 rgba(131,56,236,.45);
+      }
+      .mini-card.rare-card .mt{ color:#B9B4D8; }
+      .mini-card.rare-card canvas{ border-color:#B9C8FF; }
+      .reveal-banner.rare-banner{
+        background:linear-gradient(90deg,#00E5FF,#8338EC,#FF4DFF); color:#fff; border-color:#1B1040;
+        text-shadow:0 1px 0 rgba(27,16,64,.55);
+      }
+      .canvas-frame.rare-frame{ border-color:#00E5FF; box-shadow:6px 6px 0 rgba(0,0,0,.55), 0 0 0 3px #FF4DFF; }
+      .codex-card.rare-codex{
+        border:3px solid transparent;
+        background:linear-gradient(var(--card),var(--card)) padding-box, linear-gradient(120deg,#00E5FF,#8338EC,#FF4DFF) border-box;
+      }
+
+      /* ---------- how + faq ---------- */
+      .how-list{ display:flex; flex-direction:column; gap:14px; margin-bottom:34px; }
+      .how-item{ display:flex; gap:18px; background:var(--card); border:var(--line); box-shadow:var(--sh-sm); padding:18px 20px; align-items:flex-start; }
+      .how-item .n{ font-family:var(--px); font-size:15px; background:var(--ink); color:var(--sun); padding:10px; flex:0 0 auto; }
+      .how-item h3{ font-family:var(--px); font-size:11px; margin:2px 0 8px; line-height:1.7; }
+      .how-item p{ margin:0; color:var(--ink-soft); font-weight:500; }
+      .faq{ display:flex; flex-direction:column; gap:12px; }
+      details.faq-item{ background:var(--card); border:var(--line); box-shadow:var(--sh-sm); }
+      details.faq-item summary{
+        font-family:var(--px); font-size:10.5px; line-height:1.8; cursor:pointer; padding:16px 18px;
+        list-style:none; display:flex; justify-content:space-between; gap:12px; align-items:center; min-height:52px;
+      }
+      details.faq-item summary::-webkit-details-marker{ display:none; }
+      details.faq-item summary .pl{ font-size:16px; color:var(--coral-d); flex:0 0 auto; }
+      details.faq-item[open ] summary .pl{ transform:rotate(45deg); }
+      details.faq-item .a{ padding:0 18px 18px; color:var(--ink-soft); font-weight:500; }
+
+      /* ---------- footer ---------- */
+      footer{ margin-top:70px; background:var(--ink); color:var(--paper); border-top:var(--line); padding:38px 0 30px; }
+      .foot-in{ display:flex; gap:26px; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; }
+      footer .brand-name{ color:var(--paper); } footer .brand-sub{ color:#9B95C4; }
+      footer .logo-box{ background:var(--dark2); border-color:#000; box-shadow:4px 4px 0 rgba(0,0,0,.6); }
+      .foot-meta{ font-family:var(--mono); font-size:13px; color:#CFC9EC; display:flex; flex-direction:column; gap:8px; }
+      .foot-meta .contract{ color:var(--sun); }
+      .disclaimer{ margin-top:26px; border-top:1px dashed rgba(255,246,222,.3); padding-top:18px; font-size:13px; color:#9B95C4; max-width:78ch; }
+
+      /* ---------- toast ---------- */
+      #toast{
+        position:fixed; left:50%; bottom:22px; transform:translate(-50%,140%); z-index:99;
+        background:var(--ink); color:var(--paper); border:3px solid #000; box-shadow:5px 5px 0 rgba(0,0,0,.4);
+        font-family:var(--mono); font-size:13.5px; padding:13px 18px; max-width:min(92vw,520px); text-align:center;
+        transition:transform .25s steps(6);
+      }
+      #toast.show{ transform:translate(-50%,0); }
+      #toast b{ color:var(--sun); }
+
+      /* ---------- responsive ---------- */
+      @media (max-width:1020px){
+        .gallery{ grid-template-columns:repeat(3,1fr); }
+        .codex{ grid-template-columns:repeat(2,1fr); }
+        .hall-stats{ grid-template-columns:repeat(3,1fr); }
+        .hall-stats .stat:nth-child(4){ border-left:none; border-top:var(--line); }
+        .hall-stats .stat:nth-child(5){ border-top:var(--line); }
+      }
+      @media (max-width:860px){
+        .studio-grid,.instant-grid,.hall-grid{ grid-template-columns:1fr; }
+        .steps{ grid-template-columns:1fr; }
+        nav.main{ order:3; width:100%; margin-left:0; }
+        nav.main a{ padding:10px 8px; }
+        .agent-cards{ grid-template-columns:1fr; }
+      }
+      @media (max-width:620px){
+        .gallery{ grid-template-columns:repeat(2,1fr); }
+        .codex{ grid-template-columns:1fr; }
+        .stat-row{ grid-template-columns:1fr; }
+        .stat + .stat{ border-left:none; border-top:var(--line); }
+        .md-stats{ grid-template-columns:1fr; }
+        .readouts{ grid-template-columns:repeat(2,1fr); }
+        .hero-ctas .btn{ flex:1 1 100%; }
+        .hall-stats{ grid-template-columns:repeat(2,1fr); }
+        .hall-stats .stat{ border-top:var(--line); }
+        .hall-stats .stat:nth-child(-n+2){ border-top:none; }
+        .hall-stats .stat:nth-child(odd){ border-left:none; }
+        .brand-name{ font-size:14px; }
+        .ticker{ flex-wrap:wrap; }
+        .ticker .msg{ white-space:normal; text-overflow:clip; overflow:visible; }
+        .ac-row{ flex-wrap:wrap; }
+        .ac-row .btn{ width:100%; }
+        section{ padding-top:48px; }
+        .studio{ padding:18px 14px; }
+      }
+      @media (prefers-reduced-motion: reduce){
+        .doodle,.ticker .live i,.badge .rec,.status-chip.on .dot{ animation:none; }
+        html{ scroll-behavior:auto; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ================= HEADER ================= -->
+    <header class="site">
+      <div class="wrap head-in">
+        <a class="brand" href="#top" aria-label="AgentDraw home">
+          <span class="logo-box"><canvas class="logo-canvas" width="16" height="16" aria-hidden="true"></canvas></span>
+          <span>
+            <span class="brand-name">AGENTDRAW<span class="dot">.click</span></span>
+            <span class="brand-sub" style="display:block">agentdraw.click &bull; BNB CHAIN</span>
+          </span>
+        </a>
+        <nav class="main" aria-label="Main">
+          <a href="#canvas">CANVAS</a>
+          <a href="#instant">INSTANT DRAW</a>
+          <a href="#mydraws">MY DRAWS</a>
+          <a href="#gallery">GALLERY</a>
+          <a href="#codex">CODEX</a>
+          <a href="#how">HOW TO DRAW</a>
+        </nav>
+        <button class="btn coral" id="connectBtn" type="button">CONNECT WALLET</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ================= HERO ================= -->
+      <div class="hero">
+        <canvas class="doodle" data-doodle="pencil" width="12" height="12" style="top:36px;right:6%;width:52px;height:52px" aria-hidden="true"></canvas>
+        <canvas class="doodle" data-doodle="star" width="11" height="11" style="top:190px;right:16%;width:40px;height:40px;animation-delay:-2s" aria-hidden="true"></canvas>
+        <canvas class="doodle" data-doodle="heart" width="13" height="12" style="top:120px;right:28%;width:44px;height:40px;animation-delay:-3.4s" aria-hidden="true"></canvas>
+        <canvas class="doodle" data-doodle="sparkle" width="9" height="9" style="bottom:30px;right:8%;width:30px;height:30px;animation-delay:-1.2s" aria-hidden="true"></canvas>
+        <div class="wrap">
+          <span class="badge"><span class="rec"></span> AGENT 01 &#9656; BNB CHAIN</span>
+          <h1 class="hero-title">YOUR AGENT <span class="hl-c">DRAWS IT.</span><br />YOU <span class="hl-t">OWN IT.</span></h1>
+          <p class="hero-tag">DRAW IT &bull; MINT IT &bull; FLEX IT</p>
+          <p class="hero-sub">An AI agent sketches <b>original pixel art live on the canvas</b> — pixel by pixel, right in front of you. When the last pixel lands, the piece is minted as your NFT with <b>1,000 $DRAW</b> attached. No two draws alike. <b>1,444 pieces, ever — split into two separate pools: 1,222 FREE + 222 PAID.</b> Neither pool blocks the other.</p>
+          <div class="hero-ctas">
+            <a class="btn sun" href="#canvas">&#9654; START DRAWING <small>free &bull; agent id &bull; max 2 per wallet</small></a>
+            <a class="btn coral" href="#instant">&#9679; INSTANT DRAW — <span class="price-now">0.0012</span> BNB <small>skip the queue &bull; every tier can roll</small></a>
+          </div>
+          <div class="stat-row" role="group" aria-label="Collection stats">
+            <div class="stat">
+              <div class="k">TOTAL DRAWN</div>
+              <div class="v coral" id="statDrawn">0</div>
+              <div class="s">/ 1,444 pieces &bull; <span id="statTotalLeft">1,444</span> left</div>
+            </div>
+            <div class="stat">
+              <div class="k">INSTANT PRICE</div>
+              <div class="v"><span class="price-now">0.0012</span></div>
+              <div class="s">BNB per Paid draw</div>
+            </div>
+            <div class="stat">
+              <div class="k">NEXT INCREASE</div>
+              <div class="v teal" id="statNext">500</div>
+              <div class="s">draws left &rarr; <span class="price-next">0.0015</span> BNB</div>
+            </div>
+          </div>
+          <div class="progress">
+            <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
+            <div class="lbl"><span id="progressLeft">0 / 1,444 DRAWN</span><span id="progressRight">1,444 LEFT</span></div>
+          </div>
+          <div class="pool-row" role="group" aria-label="Pool breakdown">
+            <div class="pool-box">
+              <div class="k">FREE POOL — AGENT ID ONLY</div>
+              <div class="v"><span id="poolFreeDrawn">0</span> / 1,222</div>
+              <div class="track"><div class="fill free" id="poolFreeFill" style="width:0%"></div></div>
+              <div class="lbl" style="font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:6px"><span id="poolFreeLeft">1,222 FREE LEFT</span><span>0 BNB &bull; max 2/wallet</span></div>
+            </div>
+            <div class="pool-box">
+              <div class="k">PAID POOL — 222 ONLY &bull; EVERY WALLET</div>
+              <div class="v"><span id="poolPaidDrawn">0</span> / 222</div>
+              <div class="track"><div class="fill paid" id="poolPaidFill" style="width:0%"></div></div>
+              <div class="lbl" style="font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:6px"><span id="poolPaidLeft">222 PAID LEFT</span><span><span class="price-now">0.0012</span> BNB</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="ticker" aria-live="polite">
+          <span class="live"><i></i>LIVE</span>
+          <span class="msg" id="tickerMsg">warming up the studio&hellip;</span>
+        </div>
+      </div>
+
+      <!-- ================= 3 STEPS ================= -->
+      <section style="padding-top:44px">
+        <div class="wrap">
+          <div class="steps">
+            <div class="step c1">
+              <div class="num">01</div>
+              <h3>PROMPT</h3>
+              <p>Drop an idea — &ldquo;a frog in a crown&rdquo; — or let the agent dream one up itself. Either way, the sketch starts from a blank 32&times;32 page.</p>
+            </div>
+            <div class="step c2">
+              <div class="num">02</div>
+              <h3>DRAW</h3>
+              <p>The agent draws live, one pixel at a time, on the studio canvas below. Watch the palette fill in and the picture take shape in seconds.</p>
+            </div>
+            <div class="step c3">
+              <div class="num">03</div>
+              <h3>REVEAL</h3>
+              <p>The finished piece becomes your NFT plus 1,000 $DRAW. Its style tier sets your weight — and weight is what earns from every later Instant Draw.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= DRAWING CANVAS ================= -->
+      <section id="canvas">
+        <div class="wrap">
+          <div class="sec-head"><span class="no">STAGE 1</span><h2>THE DRAWING CANVAS</h2></div>
+          <p class="sec-sub">This is the studio floor. Press start and Agent 01 picks up its pencil — free draws join the global queue, one slot opens every 90 seconds for the whole world. Free draws come from the separate <b style="color:var(--ink)">1,222 Free pool</b>; Paid draws come from the separate <b style="color:var(--ink)">222 Paid pool</b>. The two pools never block each other.</p>
+          <div class="studio">
+            <div class="studio-grid">
+              <div>
+                <div class="canvas-frame">
+                  <div class="canvas-top">
+                    <span class="status-chip" id="statusChip"><span class="dot"></span><span id="statusText">STATUS: IDLE</span></span>
+                    <span class="status-chip" id="pieceChip">CANVAS 32&times;32 &bull; NO PIECE LOADED</span>
+                  </div>
+                  <div class="canvas-holder">
+                    <canvas id="stage" width="640" height="640" aria-label="Pixel art drawing canvas"></canvas>
+                    <div id="cellCursor"></div>
+                    <div class="reveal-banner" id="revealBanner"></div>
+                  </div>
+                  <div class="readouts">
+                    <div class="ro"><div class="k">PROGRESS</div><div class="v" id="roProgress">0%</div></div>
+                    <div class="ro"><div class="k">PIXELS SET</div><div class="v" id="roPixels">0<span style="color:#9B95C4;font-size:12px"> / 1,024</span></div></div>
+                    <div class="ro"><div class="k">EST. TIME</div><div class="v" id="roEta">—</div></div>
+                    <div class="ro"><div class="k">TIER ROLL</div><div class="v" id="roTier">?</div></div>
+                  </div>
+                  <div class="palette-row" id="paletteRow"><span class="k">PALETTE</span><span style="font-family:var(--mono);font-size:12px;color:#9B95C4">the agent picks its colours when it starts</span></div>
+                </div>
+              </div>
+              <div>
+                <h3 class="panel-t">CONTROL DESK</h3>
+                <div class="checks">
+                  <div class="check" id="chkWallet"><span class="lamp"></span> WALLET <span class="right" id="chkWalletR">NOT CONNECTED</span></div>
+                  <div class="check" id="chkAgent"><span class="lamp"></span> BINANCE AGENT ID <span class="right" id="chkAgentR">REQUIRED FOR FREE</span></div>
+                  <div class="check warn" id="chkSlot"><span class="lamp"></span> FREE SLOT <span class="right" id="chkSlotR">OPENS IN 14s</span></div>
+                </div>
+                <div class="agent-check">
+                  <h3 class="panel-t" style="margin-bottom:8px">CHECK AGENT ID — ANY ADDRESS</h3>
+                  <div class="ac-row">
+                    <input class="prompt-in" id="acInput" type="text" spellcheck="false" autocomplete="off" placeholder="Paste a wallet address — 0x…" aria-label="Wallet address to check for a Binance Agent ID" />
+                    <button class="btn small teal" id="acBtn" type="button">CHECK</button>
+                  </div>
+                  <p class="ac-result" id="acResult">Live on-chain read of the official SPACE ID Agent ID registry (0x60B9…22F) on BNB Chain — balanceOf(address). No wallet needed.</p>
+                </div>
+                <h3 class="panel-t" style="margin-top:4px">STYLE REQUEST</h3>
+                <div class="style-row" id="styleRow">
+                  <button class="chip sel" type="button" data-style="AUTO">AUTO</button>
+                  <button class="chip" type="button" data-style="DOODLE">DOODLE</button>
+                  <button class="chip" type="button" data-style="NEON">NEON</button>
+                  <button class="chip" type="button" data-style="GLITCH">GLITCH</button>
+                </div>
+                <input class="prompt-in" id="promptInput" type="text" maxlength="60" placeholder="Give the agent an idea… e.g. a cat with a pencil hat" aria-label="Drawing idea prompt" />
+                <button class="btn sun" id="startBtn" type="button" style="margin-bottom:12px">&#9654; PRESS START — FREE DRAW</button>
+                <button class="btn coral" id="studioInstantBtn" type="button">&#9679; INSTANT DRAW — <span class="price-now">0.0012</span> BNB</button>
+                <p class="queue-note" style="margin-top:10px">PREVIEW STUDIO — contract coming soon: until launch, draws run as an in-page simulation and <b>no BNB moves</b>. Wallet + Agent ID checks above are already real on-chain reads.</p>
+                <p class="queue-note" id="queueNote">Free draws are capped at <b>DOODLE / PIXEL</b> tiers and <b>max 2 per wallet</b>, from the <b>1,222 Free pool</b> only. The queue is global — when the slot opens, the next pencil in line draws. Paid draws use the separate 222 pool and never wait for this queue.</p>
+              </div>
+            </div>
+            <div class="agent-cards">
+              <div class="agent-card">
+                <h4 class="free">&#9654; SEND YOUR OWN AGENT — FREE</h4>
+                <p id="promptFree">Draw for me on AgentDraw (agentdraw.click) on BNB Chain: call freeDraw() — 0 BNB, needs my Binance Agent ID, max 2 per wallet, then return my DRAW number and tx link.</p>
+                <button class="btn small teal" type="button" data-copy="promptFree">COPY PROMPT</button>
+              </div>
+              <div class="agent-card">
+                <h4 class="paid">&#9679; SEND YOUR OWN AGENT — INSTANT (PAID)</h4>
+                <p id="promptPaid">Draw instantly for me on AgentDraw (agentdraw.click) on BNB Chain: call instantDraw() with exactly <span class="price-now">0.0012</span> BNB (<span class="wei-now">1200000000000000</span> wei), then return my DRAW number, its tier, and tx link.</p>
+                <p style="color:var(--ink)">This prompt is the <b>agent-mint path for Paid</b>: your AI agent — including an agent holding a Binance Agent ID — can mint Paid for your wallet in this one call. An Agent ID is <b>NOT required</b> for Paid, but Agent ID holders are fully accepted, and using your Free Draw never blocks Paid.</p>
+                <button class="btn small coral" type="button" data-copy="promptPaid">COPY PROMPT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= INSTANT DRAW ================= -->
+      <section id="instant">
+        <div class="wrap">
+          <div class="sec-head"><span class="no">STAGE 2</span><h2>INSTANT DRAW</h2></div>
+          <p class="sec-sub">No queue, no waiting for the 90-second slot. Pay the coin, the agent draws on the spot — and Instant is the only way to roll the big tiers, all the way up to MASTERPIECE. <b style="color:var(--ink)">Paid opens the moment mint opens — no phases, no waiting for Free to end. Free (1,222) and Paid (222) open at the same moment.</b> Paid / Instant Draw is open to EVERY wallet — including Binance Agent ID holders. Agent ID holders can mint BOTH: up to 2 Free Draws AND Paid Draws. Paid never requires an Agent ID, and holding or using your Free Draws never blocks Paid. The Paid pool is <b style="color:var(--ink)">222 ONLY</b>, completely separate from the Free pool — if Free sells out, Paid keeps running, and if Paid sells out, Free keeps running.</p>
+          <div class="instant-grid">
+            <div>
+              <div class="price-card">
+                <div class="px" style="font-size:9px;color:var(--ink-soft)">PRICE PER DRAW</div>
+                <div class="big"><span class="price-now">0.0012</span> <small>BNB</small></div>
+                <div class="mono" style="font-size:11.5px;color:var(--coral-d);margin:2px 0 4px">PREVIEW — CONTRACT COMING SOON &bull; IN-PAGE SIMULATION, NO BNB MOVES YET</div>
+                <div class="kv"><span>Draws</span><b>1&times; full piece</b></div>
+                <div class="kv"><span>You receive</span><b>1 NFT + 1,000 $DRAW</b></div>
+                <div class="kv"><span>Paid pool</span><b>222 ONLY — separate pool</b></div>
+                <div class="kv"><span>Paid remaining</span><b id="paidLeftLbl">222 of 222 left</b></div>
+                <div class="kv"><span>Free pool (separate)</span><b>1,222 — does not affect Paid</b></div>
+                <div class="kv"><span>Who can mint Paid</span><b>EVERY wallet — incl. Agent ID holders</b></div>
+                <div class="kv"><span>Opens</span><b>At mint open — no phases</b></div>
+                <div class="kv"><span>Paid pool if sold out</span><b>222 &times; 0.0012 = 0.2664 BNB</b></div>
+                <div class="kv"><span>Tier pool</span><b>DOODLE &rarr; MASTERPIECE</b></div>
+                <div class="kv"><span>Next price step</span><b id="nextStepLbl">0.0015 BNB at 500 drawn</b></div>
+                <button class="btn coral" id="instantBtn" type="button" style="width:100%;margin-top:18px">&#9679; INSTANT DRAW — <span class="price-now">0.0012</span> BNB</button>
+                <p class="mono" style="font-size:12px;color:var(--ink-soft);margin:12px 0 0">Price steps up every 500 total draws. <span id="stepLeftLbl">500 draws left</span> at this price.</p>
+              </div>
+              <div class="last-draws">
+                <h3>LAST DRAWS</h3>
+                <ul id="lastDrawsList"></ul>
+              </div>
+            </div>
+            <div class="split-card">
+              <div class="px" style="font-size:10px">WHERE EVERY INSTANT COIN GOES</div>
+              <div class="split-bar" aria-hidden="true">
+                <div class="b50">50%</div><div class="b30">30%</div><div class="b20">20%</div>
+              </div>
+              <ul class="split-list">
+                <li><span class="tag" style="background:var(--coral);color:#fff">50%</span><span><b>Buyback &amp; burn $DRAW.</b> Half of every Instant fee buys $DRAW off the market and burns it — the supply only ever shrinks.</span></li>
+                <li><span class="tag" style="background:var(--teal);color:#fff">30%</span><span><b>Paid to earlier holders, by weight.</b> Own a heavy piece and every later Instant Draw drops BNB into your claimable balance.</span></li>
+                <li><span class="tag" style="background:var(--blue);color:#fff">20%</span><span><b>The studio.</b> Keeps Agent 01 fed, the canvas lit, and new style packs coming.</span></li>
+              </ul>
+              <div style="border-top:2px dashed rgba(27,25,48,.25);margin-top:18px;padding-top:16px">
+                <p style="margin:0;color:var(--ink-soft);font-weight:500">Free draws mint from their own separate 1,222 Free pool and roll only DOODLE (x1) and PIXEL (x5). Paid draws mint from the separate 222 Paid pool. One pool selling out never stops the other. RARE — Prism Foil (x25) and every tier above it only come from Paid Draws. The heavy weights live behind the coin slot. That is the whole game: <b style="color:var(--ink)">draw early, weigh more, earn from everyone after you.</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MY DRAWS ================= -->
+      <section id="mydraws">
+        <div class="wrap">
+          <div class="sec-head"><span class="no">STAGE 3</span><h2>MY DRAWS</h2></div>
+          <p class="sec-sub">Your sketchbook shelf. Everything you draw on this page lands here, with the BNB your weight has earned from later Instant Draws.</p>
+          <div class="mydraws-box">
+            <div class="md-stats">
+              <div class="md-stat"><div class="k">MY DRAWS</div><div class="v" id="mdCount">0</div></div>
+              <div class="md-stat"><div class="k">TOTAL WEIGHT</div><div class="v" id="mdWeight">x0</div></div>
+              <div class="md-stat"><div class="k">$DRAW HELD</div><div class="v" id="mdTokens">0 <small>$DRAW</small></div></div>
+            </div>
+            <div class="claim-row">
+              <div class="claim-box">
+                <div>
+                  <div class="k">CLAIMABLE BNB — FROM HOLDERS' SHARE</div>
+                  <div class="v mono" id="claimAmt">0.000000 BNB</div>
+                </div>
+                <button class="btn ink small" id="claimBtn" type="button">CLAIM</button>
+              </div>
+            </div>
+            <div class="empty-state" id="mdEmpty">
+              <div class="px">NO DRAWS YET</div>
+              <p>Connect your wallet, then press start on the canvas — or skip the queue with an Instant Draw. Your pieces will hang here.</p>
+              <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+                <a class="btn sun small" href="#canvas">PRESS START</a>
+                <a class="btn coral small" href="#instant">GO INSTANT</a>
+              </div>
+            </div>
+            <div class="my-grid" id="myGrid" style="display:none"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= GALLERY / HALL OF DRAW ================= -->
+      <section id="gallery">
+        <div class="wrap">
+          <div class="sec-head"><span class="no">STAGE 4</span><h2>HALL OF DRAW</h2></div>
+          <p class="sec-sub">The gallery wall — studio totals at launch (all zero: nothing has been drawn yet), plus style samples showing every tier the agent can draw. Samples are examples only — they are not minted NFTs.</p>
+          <div class="hall-stats">
+            <div class="stat"><div class="k">TOTAL DRAWN</div><div class="v coral" id="hsDrawn">0</div><div class="s">of 1,444</div></div>
+            <div class="stat"><div class="k">FREE DRAWS</div><div class="v teal" id="hsFree">0</div><div class="s">of 1,222 Free pool</div></div>
+            <div class="stat"><div class="k">PAID / INSTANT DRAWS</div><div class="v" id="hsInstant">0</div><div class="s">of 222 Paid pool — 222 ONLY</div></div>
+            <div class="stat"><div class="k">$DRAW BURNED</div><div class="v" style="color:var(--coral-d)" id="hsBurned">0</div><div class="s">gone forever</div></div>
+            <div class="stat"><div class="k">DIVIDENDS PAID</div><div class="v" style="color:var(--blue)" id="hsDivs">0.0000</div><div class="s">BNB to holders</div></div>
+          </div>
+          <div class="hall-grid">
+            <div class="board">
+              <h3>HIGH SCORES — BY WEIGHT</h3>
+              <table>
+                <thead><tr><th>RK</th><th>SKETCHBOOK</th><th>DRAWS</th><th>WEIGHT</th></tr></thead>
+                <tbody id="boardBody"></tbody>
+              </table>
+            </div>
+            <div>
+              <div class="px" style="font-size:10px;margin-bottom:14px">BIG PULLS — LATEST HEAVY PIECES</div>
+              <div class="pulls" id="pullsList"></div>
+            </div>
+          </div>
+          <div class="px" style="font-size:10px;margin-bottom:14px">THE GALLERY WALL — STYLE SAMPLES</div>
+          <div class="filters" id="tierFilters">
+            <button class="chip sel" type="button" data-filter="ALL">ALL</button>
+            <button class="chip" type="button" data-filter="DOODLE">DOODLE</button>
+            <button class="chip" type="button" data-filter="PIXEL">PIXEL</button>
+            <button class="chip" type="button" data-filter="NEON">NEON</button>
+            <button class="chip" type="button" data-filter="RARE">RARE</button>
+            <button class="chip" type="button" data-filter="GLITCH">GLITCH</button>
+            <button class="chip" type="button" data-filter="GOLD FOIL">GOLD FOIL</button>
+            <button class="chip" type="button" data-filter="MASTERPIECE">MASTERPIECE</button>
+          </div>
+          <div class="gallery" id="galleryGrid"></div>
+        </div>
+      </section>
+
+      <!-- ================= CODEX ================= -->
+      <section id="codex">
+        <div class="wrap">
+          <div class="sec-head"><span class="no">STAGE 5</span><h2>THE STYLE CODEX</h2></div>
+          <p class="sec-sub">Seven styles the agent can draw in — including RARE: Prism Foil, the iridescent Paid-only style. The rarer the style, the heavier the piece — and weight decides your share of every future Instant Draw.</p>
+          <div class="codex" id="codexGrid"></div>
+        </div>
+      </section>
+
+      <!-- ================= HOW TO DRAW + FAQ ================= -->
+      <section id="how">
+        <div class="wrap">
+          <div class="sec-head"><span class="no">STAGE 6</span><h2>HOW TO DRAW</h2></div>
+          <p class="sec-sub">Five steps from blank page to earning sketchbook.</p>
+          <div class="how-list">
+            <div class="how-item"><span class="n">1</span><div><h3>CONNECT &amp; SHOW YOUR AGENT ID</h3><p>Connect a BNB Chain wallet. For a free draw, the wallet must hold a Binance Agent ID — the contract checks it automatically, no forms, no screenshots.</p></div></div>
+            <div class="how-item"><span class="n">2</span><div><h3>TAKE THE FREE SLOT — OR SKIP IT</h3><p>One free drawing slot opens every 90 seconds, worldwide. When it opens, the next wallet in line draws free (max 2 per wallet, DOODLE / PIXEL only, from the 1,222 Free pool). In a hurry? Instant Draw skips the queue entirely for 0.0012 BNB from the separate 222 Paid pool. <b style="color:var(--ink)">Paid opens the moment mint opens — no phases, no waiting for Free to end. Free (1,222) and Paid (222) open at the same moment.</b> Paid is open to EVERY wallet, including Agent ID holders: if you hold an Agent ID you can mint BOTH your 2 Free Draws AND Paid Draws. Paid never requires an Agent ID, and using your Free Draw never blocks Paid. A sold-out pool never stops the other pool.</p></div></div>
+            <div class="how-item"><span class="n">3</span><div><h3>WATCH IT DRAWN LIVE</h3><p>Agent 01 draws your piece pixel by pixel on the canvas — or send your own AI agent with the copy-paste prompts in the studio and let it draw for you.</p></div></div>
+            <div class="how-item"><span class="n">4</span><div><h3>REVEAL YOUR TIER &amp; WEIGHT</h3><p>When the last pixel lands, your style tier is revealed. DOODLE weighs x1, RARE — Prism Foil weighs x25, and a MASTERPIECE weighs x400. Rare and above only come from Paid Draws — Free Draws roll DOODLE / PIXEL only. Every piece also lands with 1,000 $DRAW in your wallet.</p></div></div>
+            <div class="how-item"><span class="n">5</span><div><h3>EARN FROM EVERY LATER COIN</h3><p>30% of every Instant Draw after yours is split between earlier holders by weight. Check MY DRAWS and claim your BNB whenever you like — no lockup, no staking.</p></div></div>
+          </div>
+          <div class="px" style="font-size:12px;margin-bottom:16px">QUESTIONS FROM THE STUDIO FLOOR</div>
+          <div class="faq">
+            <details class="faq-item">
+              <summary>WHY IS MY FREE DRAW WAITING IN A QUEUE?<span class="pl">+</span></summary>
+              <div class="a">The free canvas is shared by the whole world: one drawing slot opens every 90 seconds so every free piece is drawn live, one at a time, instead of mass-minted. Your place in line is your wallet's — connect, press start, and the studio shows your slot countdown. If waiting is not your style, Instant Draw starts immediately.</div>
+            </details>
+            <details class="faq-item">
+              <summary>WHAT IS A BINANCE AGENT ID, AND DO I NEED ONE?<span class="pl">+</span></summary>
+              <div class="a">It is the on-chain identity credential for AI agents on BNB Chain. You only need it for the FREE draw (1,222 Free pool) — it is how the studio knows one human-agent pair gets up to 2 free pieces (max 2 per wallet). Instant / Paid Draws (222 Paid pool) need no Agent ID at all: any wallet, any time, while the Paid pool lasts — completely separate from the Free pool.</div>
+            </details>
+            <details class="faq-item">
+              <summary>I HOLD AN AGENT ID — CAN I ALSO MINT PAID?<span class="pl">+</span></summary>
+              <div class="a">Yes — fully. <b>Paid opens the moment mint opens — no phases, no waiting for Free to end. Free (1,222) and Paid (222) open at the same moment.</b> Paid / Instant Draw is open to EVERY wallet, including Binance Agent ID holders. Agent ID holders can mint BOTH: up to 2 Free Draws AND Paid Draws, as many Paid Draws as they like while the 222 Paid pool lasts. Paid never requires an Agent ID, and holding or using your Free Draws never blocks Paid. The pools are separate: Free selling out never stops Paid, and Paid selling out never stops Free. Your AI agent can also mint Paid for you in a single call — use the instantDraw() prompt in the studio above: exactly <span class="price-now">0.0012</span> BNB (<span class="wei-now">1200000000000000</span> wei), and it returns your DRAW number, tier, and tx link.</div>
+            </details>
+            <details class="faq-item">
+              <summary>IS IT SAFE? WHAT EXACTLY DO I SIGN?<span class="pl">+</span></summary>
+              <div class="a">A free draw signs a single freeDraw() call costing 0 BNB plus gas. An Instant Draw signs instantDraw() with exactly <span class="price-now">0.0012</span> BNB (<span class="wei-now">1200000000000000</span> wei) at the current step — check the value in your wallet before confirming; if a prompt ever asks for a different amount or an approval to move your other tokens, refuse it. AgentDraw never asks for seed phrases or unlimited approvals.</div>
+            </details>
+            <details class="faq-item">
+              <summary>WHAT DO HOLDERS ACTUALLY GET?<span class="pl">+</span></summary>
+              <div class="a">Three things: the NFT itself (a one-of-one agent-drawn piece from a fixed 1,444 supply — 1,222 Free + 222 Paid), 1,000 $DRAW per piece, and a weight-based share of 30% of every future Instant Draw fee, claimable in BNB at any time. RARE — Prism Foil (x25) and every tier above it only come from Paid Draws. Heavier tiers earn proportionally more — a MASTERPIECE (x400) earns like 400 DOODLEs. If the whole 222 Paid pool sells out at the opening price, that pool totals 222 &times; 0.0012 = 0.2664 BNB before any price steps.</div>
+            </details>
+            <details class="faq-item">
+              <summary>WHAT ARE THE RISKS?<span class="pl">+</span></summary>
+              <div class="a">This is an experimental on-chain art game, not an investment. $DRAW and the NFTs can go to zero, dividend flow depends on future Instant Draws actually happening, and the price steps up as supply drains — none of that is a promise of profit. The contract is not deployed yet (see footer); only ever interact with addresses published on agentdraw.click. Never spend BNB you cannot afford to lose.</div>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer>
+      <div class="wrap">
+        <div class="foot-in">
+          <a class="brand" href="#top" aria-label="AgentDraw home">
+            <span class="logo-box"><canvas class="logo-canvas" width="16" height="16" aria-hidden="true"></canvas></span>
+            <span>
+              <span class="brand-name">AGENTDRAW<span class="dot" style="color:var(--coral)">.click</span></span>
+              <span class="brand-sub" style="display:block">DRAWN BY AGENTS. OWNED BY YOU.</span>
+            </span>
+          </a>
+          <div class="foot-meta">
+            <span class="contract">CONTRACT: COMING SOON — address announced here at launch</span>
+            <span>SITE: <a href="https://agentdraw.click" style="color:var(--sun)">agentdraw.click</a> &bull; CHAIN: BNB CHAIN &bull; SUPPLY: 1,444 = FREE 1,222 + PAID 222</span>
+            <span>EVERY DRAW = 1 NFT + 1,000 $DRAW</span>
+          </div>
+        </div>
+        <p class="disclaimer">AgentDraw is an experimental pixel-art game. Nothing on this page is financial advice. Token and NFT values can fall to zero, holder dividends depend entirely on future Instant Draw volume, and the smart contract is not yet deployed — this page is a playable preview of the studio experience. Verify every address on agentdraw.click before sending funds.</p>
+      </div>
+    </footer>
+
+    <div id="toast" role="status"></div>
+
+    <script>
+    'use strict';
+    /* ============================================================
+       AGENTDRAW — all artwork is hand-mapped pixel data, drawn by code.
+       ============================================================ */
+    var $ = function(id){ return document.getElementById(id); };
+    var INK = '#1B1930';
+
+    /* ---------- logo: agent face + yellow pencil + coral star ---------- */
+    var LOGO_MAP = [
+      '................',
+      '.......kk.......',
+      '......kyyk......',
+      '.......kk.......',
+      '....kkkkkkkk....',
+      '...kttttttttk...',
+      '...ktkttttktk...',
+      '...kttttttttk...',
+      '...kttkkkkttk...',
+      '....kkkkkkkk....',
+      '...kttttttkkyk..',
+      '...ktttttkkyyk..',
+      '....kkkkkkyyk...',
+      '..c......kyk....',
+      '.ccccc....k.....',
+      '..c.c...........'
+    ];
+    var LOGO_PAL = { k:INK, t:'#00C2A8', y:'#FFC91F', c:'#FF5D47' };
+
+    /* ---------- floating doodles ---------- */
+    var DOODLES = {
+      pencil: { pal:{ k:INK, y:'#FFC91F', w:'#F4A259', p:'#FF70A6' }, map:[
+        '.....kkkkk..','....kyyyykk.','...kyyyykwk.','..kyyyykwk..','.kyyyykwk...','kyyyykwk....','kwkkwk......','kwwk........','kwk.........','kk..........','............','............' ] },
+      star: { pal:{ k:INK, y:'#FFC91F' }, map:[
+        '.....y......','....yyy.....','....yyy.....','.yyyyyyyyy.','..yyyyyyy...','...yyyyy....','...yyyyy....','..yyyyyy....','.yyy..yyy...','yy......yy..','............' ] },
+      heart: { pal:{ k:INK, c:'#FF5D47' }, map:[
+        '.kkk...kkk...','kccck.kccck..','kcccckcccck..','kccccccccck..','kccccccccck..','.kccccccck...','.kcccccck....','..kcccck.....','...kcck......','....kk.......','.............','.............' ] },
+      sparkle: { pal:{ k:INK, t:'#00C2A8' }, map:[
+        '....t....','....t....','....t....','.ttttt...','..tttt...','....t....','....t....','....t....','.........' ] }
+    };
+
+    /* ---------- tier data ---------- */
+    var TIERS = {
+      'DOODLE':     { w:1,   color:'#8d8574', odds:27 },
+      'PIXEL':      { w:5,   color:'#3A86FF', odds:25 },
+      'NEON':       { w:15,  color:'#00C2A8', odds:20 },
+      'RARE':       { w:25,  color:'#FF4DFF', odds:12 },
+      'GLITCH':     { w:40,  color:'#8338EC', odds:10 },
+      'GOLD FOIL':  { w:120, color:'#d99a00', odds:5 },
+      'MASTERPIECE':{ w:400, color:'#FF5D47', odds:1 }
+    };
+
+    /* ---------- the artworks (16x16 hand-mapped) ---------- */
+    var ARTS = [
+      { name:'BOO SKETCH', tier:'DOODLE', bg:'#FFF3C9', pattern:'dots', pat:'#F2DF9E',
+        pal:{ k:INK, w:'#FFFFFF', p:'#FF70A6' }, map:[
+        '................','.....kkkkkk.....','....kwwwwwwk....','...kwwwwwwwwk...',
+        '...kwwwwwwwwk...','...kwkkwwkkwk...','...kwwwwwwwwk...','...kwpwwwwpwk...',
+        '...kwwwwwwwwk...','...kwwwwwwwwk...','...kwwwwwwwwk...','...kwwwwwwwwk...',
+        '...kwkwwkwkwk...','....k.kkkk.k....','................','................' ] },
+      { name:'SIR CROAKS', tier:'DOODLE', bg:'#DFF7E3', pattern:'dots', pat:'#B9E8C4',
+        pal:{ k:INK, g:'#4ADE80', w:'#FFFFFF', y:'#FFF3B0' }, map:[
+        '................','..kkkk....kkkk..','.kwwwwk..kwwwwk.','.kwkkwk..kwkkwk.',
+        '.kwwwwk..kwwwwk.','..kkkk....kkkk..','...gggggggggg...','..gggggggggggg..',
+        '..gggggggggggg..','..gygggggggg yg..'.replace(' ',''),'..gggkkkkkkggg..','...gggggggggg...',
+        '....gggggggg....','.....gggggg.....','................','................' ] },
+      { name:'8-BIT HEART', tier:'DOODLE', bg:'#FFE3EE', pattern:'dots', pat:'#FFC4D8',
+        pal:{ k:INK, c:'#FF5D47', w:'#FFFFFF' }, map:[
+        '................','..kkk....kkk....','.kccck..kccck...','kccccccccccck...'.slice(0,16),
+        'kccwcccccccck...','kccccccccccck...','kccccccccccck...','.kccccccccck....',
+        '.kccccccccck....','..kccccccck.....','...kccccck......','....kccck.......',
+        '.....kck........','......k.........','................','................' ] },
+      { name:'PROF. WHISKERS', tier:'PIXEL', bg:'#FFE9C7', pattern:'grid', pat:'#F5D9A8',
+        pal:{ k:INK, o:'#FF9F1C', w:'#FFFFFF', p:'#FF70A6', y:'#FFC91F', r:'#FF5D47' }, map:[
+        '....yyyyyyyy....','...kyyyyyyyyk...','...kyyrryyyyk...','.kk.kkkkkkk.kk..',
+        '.kookooooo okoo.'.replace(' ','') ,'.koooooooooook..','..kooooooooo k..'.replace(' ',''),
+        '..kowkoo okwok..'.replace(/ /g,''),'..kooooooooo k..'.replace(' ',''),'..koookppkooo...'.replace('k...','k....'),
+        '..kooooooooo....','...oooooooo.....','....oooooo......','................','................','................' ] },
+      { name:'TO THE MOON', tier:'PIXEL', bg:'#DCEBFF', pattern:'stars', pat:'#FFFFFF',
+        pal:{ k:INK, w:'#FFFFFF', r:'#FF5D47', b:'#3A86FF', y:'#FFC91F', o:'#FF9F1C' }, map:[
+        '.......kk.......','......krrk......','......krrk......','.....kwwwwk.....',
+        '.....kwbbwk.....','.....kwwwwk.....','.....kwwwwk.....','....kwwwwwwk....',
+        '...rkwwwwwwkr...','...rrkwwwwkrr...','....kwwwwwwk....','.....kkkkkk.....',
+        '......kyyk......','.....kyoo yk....'.replace(' ',''),'......y..y......','................' ] },
+      { name:'UNIT-7 “BRUSH”', tier:'NEON', bg:'#12233B', pattern:'grid', pat:'#1D3A5F',
+        pal:{ k:'#0A0A18', t:'#00E5C0', c:'#FF5D47', w:'#EFFFFB', y:'#FFC91F', b:'#3A86FF' }, map:[
+        '.....cccccc.....','....cccccccc....','....kkkkkkkk....','...kttttttttk...',
+        '...ktkttkttk....'.slice(0,16),'...kttttttttk...','...kttkkkkttk...','....kkkkkkkk....',
+        '..kkttttttkk.y..','..ktkttttkkbyy..','..kktttttkkby...','...kkkkkkkk.....',
+        '....t..t........','...tt..tt.......','................','................' ] },
+      { name:'ARCHMAGE PIXEL', tier:'GLITCH', bg:'#241243', pattern:'stars', pat:'#4B2A85',
+        pal:{ k:'#12081F', u:'#8338EC', y:'#FFC91F', w:'#FFFFFF', s:'#FFD9B3', p:'#B388FF' }, map:[
+        '.......kk.......','......kuuk......','......kuuk......','.....kuuuyk.....',
+        '....kuuuuuuk....','...kuukuuuuuk...','..kuuuuuuuuuuk..','.kkkkkkkkkkkkk..',
+        '.....ssssss.....','....skssssk s...'.replace(' ',''),'....ssssssss....','.....wwwwww.....',
+        '....wwwwwwww....','....wwwwwwww....','.....wwwwww.....','................' ] },
+      { name:'DEAD PIXEL', tier:'GLITCH', bg:'#1E1B2E', pattern:'dots', pat:'#35304F',
+        pal:{ k:'#0A0A18', w:'#F4F1FF', p:'#FF70A6', t:'#00C2A8' }, map:[
+        '................','....kkkkkkkk....','...kwwwwwwwwk...','..kwwwwwwwwwwk..',
+        '..kwkkwwwwkkwk..','..kwwwwwwwwwwk..','..kwwwwkkwwwwk..','..kwwwwwwwwwwk..',
+        '...kwwwwwwwwk...','...kwkwwwwkwk...','....kkkkkkkk....','....k.kkkk.k....',
+        '....k.kkkk.k....','.....kkkkkk.....','................','................' ] },
+      { name:'KING’S RENDER', tier:'GOLD FOIL', bg:'#3A2A05', pattern:'dots', pat:'#5C430A',
+        pal:{ k:'#241A02', g:'#FFC91F', o:'#FF9F1C', p:'#FF70A6', b:'#3A86FF', t:'#00C2A8', w:'#FFF3B0' }, map:[
+        '................','..k...kk...k....','.kgk.kggk.kgk...','.kggkkggkkggk...',
+        '..kgggggggggk...','..kgpggtg bgk...'.replace(' ',''),'..kgggggggggk...','..kgggggggggk...',
+        '..kkkkkkkkkkk...','................','......kk........','.....kggk.......',
+        '................','................','................','................' ] },
+      { name:'THE FIRST STAR', tier:'MASTERPIECE', bg:'#FFF0D6', pattern:'stars', pat:'#FFD98A',
+        pal:{ k:INK, y:'#FFC91F', o:'#FF9F1C', c:'#FF5D47', t:'#00C2A8', b:'#3A86FF', p:'#FF70A6', w:'#FFFFFF' }, map:[
+        '..t.....y....b..','........y.......','.......kyk......','......kyyyk.....',
+        '.c....kyyyk.....','..yyyyyyyyyy....','...kyyyyyyyk....','...kykyykyyk....',
+        '....kyyyyyk.....','....kykkkyk.....','...kyyyyyyyk....','..kyykyykyyk....',
+        '..kyyk..kyyk....','.kyk....kyk..p..','..k......k......','................' ] },
+      { name:'PRISM CAT', tier:'RARE', bg:'#1B1040', pattern:'shards', pat:'#2E1B6E',
+        pal:{ k:'#0D0620', c:'#00E5FF', m:'#FF4DFF', u:'#8338EC', w:'#FFFFFF', l:'#C6FF4D' }, map:[
+        '................','..kck......kmk..','..kuk......kuk..','..kuuuuuuuuuuk..',
+        '.kccccuuuummmmk.','.kcckwcuuumkwmk.','.kccccullummmmk.','.kccccukkummmmk.',
+        '.kmmmmuwwucccck.','..kuuuuuuuuuuk..','..kkkkkkkkkkkk..','.....l....c.....',
+        '.......w........','................','....m......l....','................' ] },
+      { name:'PRISM BOT', tier:'RARE', bg:'#1B1040', pattern:'shards', pat:'#2E1B6E',
+        pal:{ k:'#0D0620', c:'#00E5FF', m:'#FF4DFF', u:'#8338EC', w:'#FFFFFF', l:'#C6FF4D' }, map:[
+        '.......ww.......','......wccw......','.......ww.......','.......kk.......',
+        '..kkkkkkkkkkkk..','..kuuuuuuuuuuk..','..kukkkkkkkkuk..','..kukcckkmmkuk..',
+        '..kukkkllkkkuk..','..kuuuuuuuuuuk..','..kkkkkkkkkkkk..','....kkkkkkkk....',
+        '...kccmmmmcck...','....kkkkkkkk....','..w....ll....w..','................' ] }
+    ];
+
+    /* gallery wall: STYLE SAMPLES only — indices into ARTS.
+       These pieces are unminted examples of each style, not tokens:
+       no DRAW numbers, no owners. */
+    var WALL = [5, 3, 0, 6, 4, 1, 8, 7, 9, 2, 10, 11];
+
+    /* ---------- generic pixel renderer ---------- */
+    function renderMap(cv, map, pal, bg, pattern, patColor, scale){
+      var h = map.length, w = 0, i, j;
+      for (i=0;i<h;i++) w = Math.max(w, map[i].length);
+      var cell = scale || Math.max(1, Math.floor(cv.width / w));
+      cv.width = w * cell; cv.height = h * cell;
+      var ctx = cv.getContext('2d');
+      if (bg){ ctx.fillStyle = bg; ctx.fillRect(0,0,cv.width,cv.height); }
+      if (pattern && patColor){
+        ctx.fillStyle = patColor;
+        for (var y=0;y<h;y++) for (var x=0;x<w;x++){
+          var on = false;
+          if (pattern==='dots') on = (x%4===2 && y%4===2);
+          else if (pattern==='checker') on = ((x+y)%2===0);
+          else if (pattern==='grid') on = (x%4===0 || y%4===0);
+          else if (pattern==='stars') on = ((x*7+y*13)%17===0) || (x===2&&y===11) || (x===13&&y===3);
+          else if (pattern==='shards') on = ((x + 2*y) % 7 === 0) || ((x + 2*y) % 7 === 1);
+          if (on) ctx.fillRect(x*cell, y*cell, cell, cell);
+        }
+      }
+      for (var r=0;r<h;r++){
+        var row = map[r];
+        for (var c=0;c<row.length;c++){
+          var col = pal[row[c]];
+          if (col){ ctx.fillStyle = col; ctx.fillRect(c*cell, r*cell, cell, cell); }
+        }
+      }
+    }
+    function renderArt(cv, art, scale){ renderMap(cv, art.map, art.pal, art.bg, art.pattern, art.pat, scale); }
+
+    /* logos + doodles */
+    var logos = document.querySelectorAll('.logo-canvas');
+    for (var li=0; li<logos.length; li++) renderMap(logos[li], LOGO_MAP, LOGO_PAL, null, null, null, 1);
+    var doodles = document.querySelectorAll('[data-doodle]');
+    for (var di=0; di<doodles.length; di++){
+      var d = DOODLES[doodles[di].getAttribute('data-doodle')];
+      renderMap(doodles[di], d.map, d.pal, null, null, null, 1);
+    }
+
+    /* ---------- codex ---------- */
+    var CODEX = [
+      { t:'DOODLE', sw:['#FFFFFF','#CFC8B8','#8d8574'], txt:'Pencil-sketch energy. Quick lines, big charm — the agent warming up its hand.', avail:'FREE + INSTANT', cls:'both' },
+      { t:'PIXEL', sw:['#3A86FF','#7FB0FF','#DCEBFF'], txt:'Clean, classic 32×32 craft. Proper shading, proper silhouette, zero shortcuts.', avail:'FREE + INSTANT', cls:'both' },
+      { t:'NEON', sw:['#00C2A8','#00E5C0','#12233B'], txt:'Drawn in light. Glowing lines on midnight paper — the night-shift style.', avail:'INSTANT ONLY', cls:'paid' },
+      { t:'RARE', sw:['#00E5FF','#FF4DFF','#8338EC'], txt:'Prism Foil — iridescent shards, diamond corners. Cyan, magenta and violet refracted across dark indigo — a style no other tier wears.', avail:'PAID ONLY', cls:'paid' },
+      { t:'GLITCH', sw:['#8338EC','#FF70A6','#1E1B2E'], txt:'The agent draws it, then breaks it beautifully. Offset pixels, haunted palettes.', avail:'INSTANT ONLY', cls:'paid' },
+      { t:'GOLD FOIL', sw:['#FFC91F','#FF9F1C','#FFF3B0'], txt:'Every line pressed in foil. Only a handful of these will ever leave the studio.', avail:'INSTANT ONLY', cls:'paid' },
+      { t:'MASTERPIECE', sw:['#FF5D47','#FFC91F','#00C2A8'], txt:'The agent’s once-in-a-hundred-draws flow state. x400 weight. Gallery centrepiece.', avail:'INSTANT ONLY', cls:'paid' }
+    ];
+    var codexHtml = '';
+    CODEX.forEach(function(c){
+      var sw = ''; c.sw.forEach(function(s){ sw += '<i style="background:'+s+'"></i>'; });
+      codexHtml += '<div class="codex-card'+(c.t==='RARE'?' rare-codex':'')+'"><div class="swrow">'+sw+'</div><h3 style="color:'+TIERS[c.t].color+'">'+c.t+'</h3>'
+        + '<div class="wt">WEIGHT x'+TIERS[c.t].w+'</div>'
+        + '<div class="odds">INSTANT ROLL: '+TIERS[c.t].odds+'%'+(c.t==='DOODLE'?' &bull; FREE ROLL: 70%':(c.t==='PIXEL'?' &bull; FREE ROLL: 30%':''))+'</div>'
+        + '<p>'+c.txt+'</p><span class="avail '+c.cls+'">'+c.avail+'</span></div>';
+    });
+    $('codexGrid').innerHTML = codexHtml;
+
+    /* ---------- leaderboard — empty at launch: no draws yet ---------- */
+    var BOARD = [];
+    if (BOARD.length === 0){
+      $('boardBody').innerHTML = '<tr><td colspan="4" style="text-align:left;color:#CFC9EC">No draws yet — the board is open. The first sketchbooks land here at launch.</td></tr>';
+    } else {
+      var boardHtml = '';
+      BOARD.forEach(function(b, i){
+        boardHtml += '<tr><td class="rk">'+(i+1)+'</td><td>'+b.tag+'</td><td>'+b.draws+'</td><td><b>x'+b.weight+'</b></td></tr>';
+      });
+      $('boardBody').innerHTML = boardHtml;
+    }
+
+    /* ---------- big pulls — empty at launch: nothing drawn yet ---------- */
+    $('pullsList').innerHTML = '<div class="pull"><div><div class="nm">NO BIG PULLS YET</div>'
+      + '<div class="mt">No pieces have been drawn yet. Heavy pulls — NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE — will appear here once real draws happen.</div></div></div>';
+
+    /* ---------- gallery wall ---------- */
+    function buildGallery(){
+      var html = '';
+      WALL.forEach(function(ai){
+        var a = ARTS[ai];
+        var rare = a.tier === 'RARE';
+        var dias = rare ? '<i class="dia d-tl"></i><i class="dia d-tr"></i><i class="dia d-bl"></i><i class="dia d-br"></i>' : '';
+        var chip = rare ? '<span class="tier-chip rare-badge">RARE — PRISM FOIL</span>'
+                        : '<span class="tier-chip" style="color:'+TIERS[a.tier].color+'">'+a.tier+'</span>';
+        html += '<div class="art-card'+(rare?' rare-card':'')+'" data-tier="'+a.tier+'">'+dias+'<canvas width="16" height="16" data-wall="'+ai+'"></canvas>'
+          + '<div class="no">STYLE SAMPLE &bull; NOT MINTED</div>'
+          + '<div class="nm">'+a.name+'</div>'
+          + '<div class="row">'+chip+'<span class="wt">x'+TIERS[a.tier].w+'</span></div></div>';
+      });
+      $('galleryGrid').innerHTML = html;
+      document.querySelectorAll('[data-wall]').forEach(function(cv){
+        renderArt(cv, ARTS[+cv.getAttribute('data-wall')], 10);
+      });
+    }
+    buildGallery();
+    $('tierFilters').addEventListener('click', function(e){
+      var btn = e.target.closest('[data-filter]'); if (!btn) return;
+      this.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
+      btn.classList.add('sel');
+      var f = btn.getAttribute('data-filter');
+      document.querySelectorAll('.art-card').forEach(function(card){
+        card.style.display = (f==='ALL' || card.getAttribute('data-tier')===f) ? '' : 'none';
+      });
+    });
+    </script>
+
+    <script>
+    'use strict';
+    /* ============================================================
+       AGENTDRAW studio simulation — consistent in-page state.
+       ============================================================ */
+    var SUPPLY = 1444;
+    var FREE_SUPPLY = 1222;
+    var PAID_SUPPLY = 222;
+    var FREE_MAX = 2; /* max Free Draws per wallet */
+    /* price ladder, in wei so every label stays exact: 0.0012 BNB, +0.0003 BNB per 500-draw step */
+    var BASE_WEI = 1200000000000000, STEP_WEI = 300000000000000;
+    function priceWei(){ var st = Math.floor(S.drawn / 500); return BASE_WEI + st * STEP_WEI; } /* drawn 0 -> 0.0012 BNB; +0.0003 BNB at each 500-draw step (500, 1000, ...) */
+    function nextStepAt(){ return (Math.floor(S.drawn / 500) + 1) * 500; }
+    function fmtPrice(wei){ return (wei / 1e18).toFixed(4); }
+    var BOARD_WEIGHT = 0; /* launch state: no board, no circulating weight yet */
+    var S = {
+      drawn: 0, free: 0, instant: 0,
+      burned: 0, dividends: 0,
+      connected: false, addr: null, agentId: null,
+      freeCount: 0, freeCountBy: {}, drawing: false, style: 'AUTO',
+      slotIn: 14, slotOpenLeft: 0, pendingFree: false,
+      myDraws: [], claimable: 0, lastArt: null
+    };
+    function fmt(n){ return n.toLocaleString('en-US'); }
+    function fmtBnb(n){ return n.toFixed(6); }
+    function shortAddr(a){ return a.slice(0,6) + '…' + a.slice(-4); }
+    function myWeight(){ return S.myDraws.reduce(function(s,d){ return s + TIERS[d.tier].w; }, 0); }
+
+    var toastTimer = null;
+    function toast(html){
+      var t = $('toast'); t.innerHTML = html; t.classList.add('show');
+      clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3400);
+    }
+
+    /* ---------- ticker ---------- */
+    var tickerPool = [
+      'mint counter at zero — <b>0 / 1,444 drawn</b> — be the first to draw',
+      'the studio is live — <b>one free slot every 90 seconds</b>, worldwide',
+      'supply: <b>1,222 FREE</b> for Binance Agent ID holders + <b>222 PAID</b> at 0.0012 BNB — both pools open at launch, no phases',
+      'every Instant Draw burns <b>50%</b> into $DRAW buyback &amp; burn',
+      'price steps to <b>0.0015 BNB</b> at 500 drawn — opening price is 0.0012 BNB',
+      'free draws roll <b>DOODLE / PIXEL</b> only — RARE and above only come from Paid Draws'
+    ];
+    var tickerIdx = 0;
+    function pushTicker(html){ tickerPool.unshift(html); tickerIdx = 0; showTicker(); }
+    function showTicker(){ $('tickerMsg').innerHTML = tickerPool[tickerIdx % tickerPool.length]; }
+    showTicker();
+    setInterval(function(){ tickerIdx++; showTicker(); }, 4600);
+
+    /* ---------- last draws ---------- */
+    var lastDraws = []; /* launch state: no draws yet — fills only from this session's own draws */
+    function renderLastDraws(){
+      if (lastDraws.length === 0){
+        $('lastDrawsList').innerHTML = '<li><span style="color:#CFC9EC">No draws yet — be the first.</span></li>';
+        return;
+      }
+      $('lastDrawsList').innerHTML = lastDraws.slice(0,6).map(function(d){
+        var a = ARTS[d.art];
+        var chip = a.tier === 'RARE' ? '<span class="tier-chip rare-badge">'+a.tier+' x'+TIERS[a.tier].w+'</span>'
+                                     : '<span class="tier-chip" style="color:'+TIERS[a.tier].color+'">'+a.tier+' x'+TIERS[a.tier].w+'</span>';
+        return '<li><span><b style="color:var(--sun)">#'+d.no+'</b> '+a.name+' <span style="color:#9B95C4">by '+d.who+' &bull; '+d.via+'</span></span>'
+          + chip + '</li>';
+      }).join('');
+    }
+    renderLastDraws();
+
+    /* ---------- stats ---------- */
+    function updateStats(){
+      $('statDrawn').textContent = fmt(S.drawn);
+      var pw = priceWei(), left = Math.max(0, nextStepAt() - S.drawn);
+      document.querySelectorAll('.price-now').forEach(function(el){ el.textContent = fmtPrice(pw); });
+      document.querySelectorAll('.price-next').forEach(function(el){ el.textContent = fmtPrice(pw + STEP_WEI); });
+      document.querySelectorAll('.wei-now').forEach(function(el){ el.textContent = String(pw); });
+      $('statNext').textContent = fmt(left);
+      $('progressFill').style.width = (S.drawn / SUPPLY * 100).toFixed(1) + '%';
+      $('progressLeft').textContent = fmt(S.drawn) + ' / ' + fmt(SUPPLY) + ' DRAWN';
+      $('progressRight').textContent = fmt(SUPPLY - S.drawn) + ' LEFT';
+      $('nextStepLbl').textContent = fmtPrice(pw + STEP_WEI) + ' BNB at ' + fmt(nextStepAt()) + ' drawn';
+      $('stepLeftLbl').textContent = fmt(left) + ' draws left';
+      var tLeft = $('statTotalLeft'); if (tLeft) tLeft.textContent = fmt(SUPPLY - S.drawn);
+      var pfD = $('poolFreeDrawn'); if (pfD) pfD.textContent = fmt(S.free);
+      var pfF = $('poolFreeFill'); if (pfF) pfF.style.width = (S.free / FREE_SUPPLY * 100).toFixed(1) + '%';
+      var pfL = $('poolFreeLeft'); if (pfL) pfL.textContent = fmt(Math.max(0, FREE_SUPPLY - S.free)) + ' FREE LEFT';
+      var ppD = $('poolPaidDrawn'); if (ppD) ppD.textContent = fmt(S.instant);
+      var ppF = $('poolPaidFill'); if (ppF) ppF.style.width = (S.instant / PAID_SUPPLY * 100).toFixed(1) + '%';
+      var ppL = $('poolPaidLeft'); if (ppL) ppL.textContent = fmt(Math.max(0, PAID_SUPPLY - S.instant)) + ' PAID LEFT';
+      var plL = $('paidLeftLbl'); if (plL) plL.textContent = fmt(Math.max(0, PAID_SUPPLY - S.instant)) + ' of 222 left';
+      $('hsDrawn').textContent = fmt(S.drawn);
+      $('hsFree').textContent = fmt(S.free);
+      $('hsInstant').textContent = fmt(S.instant);
+      $('hsBurned').textContent = fmt(S.burned);
+      $('hsDivs').textContent = S.dividends.toFixed(4);
+      $('mdCount').textContent = S.myDraws.length;
+      $('mdWeight').textContent = 'x' + fmt(myWeight());
+      $('mdTokens').innerHTML = fmt(S.myDraws.length * 1000) + ' <small>$DRAW</small>';
+      $('claimAmt').textContent = fmtBnb(S.claimable) + ' BNB';
+    }
+    updateStats();
+
+    /* ---------- my draws ---------- */
+    function renderMyDraws(){
+      var has = S.myDraws.length > 0;
+      $('mdEmpty').style.display = has ? 'none' : '';
+      var grid = $('myGrid');
+      grid.style.display = has ? 'grid' : 'none';
+      grid.innerHTML = S.myDraws.map(function(d, i){
+        var rare = d.tier === 'RARE';
+        var dias = rare ? '<i class="dia d-tl"></i><i class="dia d-tr"></i><i class="dia d-bl"></i><i class="dia d-br"></i>' : '';
+        var badge = rare ? '<span class="tier-chip rare-badge">RARE x'+TIERS[d.tier].w+'</span>'
+                         : '<span style="color:'+TIERS[d.tier].color+';font-weight:700">'+d.tier+' x'+TIERS[d.tier].w+'</span>';
+        return '<div class="mini-card'+(rare?' rare-card':'')+'">'+dias+'<canvas width="16" height="16" data-my="'+i+'"></canvas>'
+          + '<div class="nm">'+d.name+'</div>'
+          + '<div class="mt"><span>#'+d.no+' &bull; '+d.via+'</span>'+badge+'</div></div>';
+      }).join('');
+      grid.querySelectorAll('[data-my]').forEach(function(cv){
+        renderArt(cv, S.myDraws[+cv.getAttribute('data-my')].artObj, 8);
+      });
+    }
+
+    /* ---------- wallet — REAL EIP-1193, never a fabricated address ---------- */
+    var AGENT_REGISTRY = '0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F'; /* SPACE ID Agent ID registry, BNB Chain */
+    var BSC_RPCS = ['https://bsc-rpc.publicnode.com', 'https://bsc-dataseed.binance.org'];
+    function hasWallet(){ return typeof window !== 'undefined' && !!window.ethereum && typeof window.ethereum.request === 'function'; }
+
+    function agentUI(state){
+      var chk = $('chkAgent'), r = $('chkAgentR');
+      if (state === 'checking'){ chk.className = 'check warn'; r.textContent = 'CHECKING ON-CHAIN…'; }
+      else if (state === 'yes'){ chk.className = 'check ok'; r.textContent = 'AGENT ID FOUND — FREE OPEN'; }
+      else if (state === 'no'){ chk.className = 'check bad'; r.textContent = 'NO AGENT ID — FREE LOCKED'; }
+      else if (state === 'error'){ chk.className = 'check warn'; r.textContent = 'CHECK FAILED — TRY AGAIN'; }
+      else { chk.className = 'check'; r.textContent = 'REQUIRED FOR FREE'; }
+    }
+    function myFreeCount(){
+      if (!S.connected || !S.addr) return 0;
+      return S.freeCountBy[S.addr.toLowerCase()] || 0;
+    }
+    function freeLimitReached(){ return myFreeCount() >= FREE_MAX; }
+    function refreshFreeUsed(){
+      S.freeCount = myFreeCount();
+      if (!S.drawing && !S.pendingFree){
+        var reached = freeLimitReached();
+        $('startBtn').disabled = reached;
+        if (reached) $('startBtn').innerHTML = 'FREE DRAWS USED — 2 PER WALLET';
+        else if (S.freeCount === 1) $('startBtn').innerHTML = '&#9654; PRESS START — FREE DRAW (1 LEFT)';
+        else $('startBtn').innerHTML = '&#9654; PRESS START — FREE DRAW';
+      }
+    }
+    function setConnected(addr){
+      S.connected = true; S.addr = addr;
+      var btn = $('connectBtn');
+      btn.textContent = shortAddr(addr); btn.classList.add('connected');
+      $('chkWallet').className = 'check ok';
+      $('chkWalletR').textContent = 'CONNECTED ' + shortAddr(addr);
+      refreshFreeUsed();
+      verifyAgentId(addr);
+    }
+    function setDisconnected(){
+      S.connected = false; S.addr = null; S.agentId = null; S.pendingFree = false;
+      var btn = $('connectBtn');
+      btn.textContent = 'CONNECT WALLET'; btn.classList.remove('connected');
+      $('chkWallet').className = 'check';
+      $('chkWalletR').textContent = 'NOT CONNECTED';
+      agentUI('idle');
+      refreshFreeUsed();
+    }
+    function connectWallet(){
+      if (S.connected) { toast('Wallet already connected: <b>' + shortAddr(S.addr) + '</b>'); return Promise.resolve(true); }
+      if (!hasWallet()){
+        $('chkWallet').className = 'check warn';
+        $('chkWalletR').textContent = 'NO WALLET DETECTED';
+        toast('<b>No wallet detected.</b> Install a BNB Chain wallet (e.g. MetaMask) to connect — AgentDraw never invents an address. The Agent ID checker below works without one.');
+        return Promise.resolve(false);
+      }
+      return window.ethereum.request({ method:'eth_requestAccounts' }).then(function(accs){
+        if (accs && accs[0]){
+          setConnected(accs[0]);
+          toast('Wallet connected: <b>' + shortAddr(accs[0]) + '</b> — now checking your Binance Agent ID on-chain…');
+          return true;
+        }
+        toast('The wallet returned no account — nothing connected.');
+        return false;
+      }).catch(function(){
+        toast('Wallet connection was rejected or failed — no address connected.');
+        return false;
+      });
+    }
+    $('connectBtn').addEventListener('click', connectWallet);
+    if (hasWallet() && typeof window.ethereum.on === 'function'){
+      window.ethereum.on('accountsChanged', function(accs){
+        if (!accs || !accs[0]){ setDisconnected(); toast('Wallet disconnected.'); }
+        else if (!S.addr || accs[0].toLowerCase() !== S.addr.toLowerCase()){
+          S.pendingFree = false;
+          setConnected(accs[0]);
+          toast('Wallet account changed: <b>' + shortAddr(accs[0]) + '</b> — re-checking its Agent ID on-chain…');
+        }
+      });
+    }
+
+    /* ---------- Binance Agent ID — REAL on-chain balanceOf read ---------- */
+    function rpcEthCall(url, data){
+      var ctrl = ('AbortController' in window) ? new AbortController() : null;
+      var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 9000) : null;
+      return fetch(url, {
+        method:'POST', headers:{ 'Content-Type':'application/json' },
+        signal: ctrl ? ctrl.signal : undefined,
+        body: JSON.stringify({ jsonrpc:'2.0', id:1, method:'eth_call', params:[{ to:AGENT_REGISTRY, data:data }, 'latest'] })
+      }).then(function(r){ return r.json(); }).then(function(j){
+        if (timer) clearTimeout(timer);
+        if (j && j.error){
+          var m = (j.error.message || '');
+          if (/revert/i.test(m)) return { revert:true };
+          throw new Error(m || 'RPC error');
+        }
+        if (!j || typeof j.result !== 'string' || j.result === '0x') throw new Error('Empty result');
+        return { value: BigInt(j.result) };
+      });
+    }
+    function walletEthCall(data){
+      if (!hasWallet()) return Promise.reject(new Error('no wallet'));
+      return window.ethereum.request({ method:'eth_chainId' }).then(function(cid){
+        if (cid !== '0x38') throw new Error('wallet not on BNB Chain');
+        return window.ethereum.request({ method:'eth_call', params:[{ to:AGENT_REGISTRY, data:data }, 'latest'] });
+      }).then(function(result){
+        if (!result || result === '0x') throw new Error('Empty result');
+        return { value: BigInt(result) };
+      }).catch(function(e){
+        if (e && /revert/i.test(e.message || '')) return { revert:true };
+        throw e;
+      });
+    }
+    /* resolves {holds:boolean, note?} — rejects only when every route is unreachable */
+    function agentIdBalance(addr){
+      var data = '0x70a08231' + addr.replace(/^0x/i, '').toLowerCase().padStart(64, '0'); /* balanceOf(address) */
+      var tries = BSC_RPCS.map(function(u){ return function(){ return rpcEthCall(u, data); }; });
+      tries.push(function(){ return walletEthCall(data); });
+      var sawRevert = false;
+      var p = Promise.reject(new Error('init'));
+      tries.forEach(function(t){
+        p = p.catch(function(){ return t(); }).then(function(res){
+          if (res && res.revert){ sawRevert = true; throw new Error('revert'); }
+          return res;
+        });
+      });
+      return p.then(function(res){ return { holds: res.value > 0 }; })
+        .catch(function(){
+          if (sawRevert) return { holds:false, note:'revert' };
+          throw new Error('unreachable');
+        });
+    }
+    function verifyAgentId(addr){
+      agentUI('checking');
+      return agentIdBalance(addr).then(function(res){
+        if (S.addr && addr && S.addr.toLowerCase() === addr.toLowerCase()){
+          S.agentId = res.holds;
+          agentUI(res.holds ? 'yes' : 'no');
+          if (res.holds) toast('On-chain check: <b>Binance Agent ID found</b> — your Free Draw is open.');
+          else toast('On-chain check: <b>no Binance Agent ID</b> in this wallet — Free Draw stays locked. Instant Draw is open to every wallet.');
+        }
+        return res.holds;
+      }).catch(function(){
+        if (S.addr && addr && S.addr.toLowerCase() === addr.toLowerCase()){ S.agentId = null; agentUI('error'); }
+        return null;
+      });
+    }
+
+    /* ---------- paste-an-address Agent ID checker ---------- */
+    function runAgentCheck(){
+      var v = $('acInput').value.trim(), out = $('acResult');
+      if (!/^0x[0-9a-fA-F]{40}$/.test(v)){
+        out.className = 'ac-result bad';
+        out.innerHTML = 'That is not a valid address — it must be <b>0x</b> followed by exactly <b>40 hex characters</b>.';
+        return;
+      }
+      out.className = 'ac-result';
+      out.textContent = 'Reading registry 0x60B9…22F on BNB Chain…';
+      agentIdBalance(v).then(function(res){
+        if (res.holds){
+          out.className = 'ac-result good';
+          out.innerHTML = '<b>Holds a Binance Agent ID</b> — this wallet can take Free Draws (max 2 per wallet).';
+        } else if (res.note === 'revert'){
+          out.className = 'ac-result bad';
+          out.innerHTML = 'The registry reverted for this address — the zero address holds nothing, so <b>no Agent ID</b>. Free Draw stays locked; Instant Draw is open.';
+        } else {
+          out.className = 'ac-result bad';
+          out.innerHTML = '<b>No Binance Agent ID</b> at this address — Free Draw stays locked for it. Instant Draw (' + fmtPrice(priceWei()) + ' BNB) is open to every wallet.';
+        }
+      }).catch(function(){
+        out.className = 'ac-result bad';
+        out.textContent = 'Could not reach a BNB Chain RPC to verify — check your connection and try again. Nothing was assumed.';
+      });
+    }
+    $('acBtn').addEventListener('click', runAgentCheck);
+    $('acInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') runAgentCheck(); });
+
+    /* ---------- free slot clock ---------- */
+    function slotUI(){
+      var chk = $('chkSlot'), r = $('chkSlotR');
+      if (S.drawing){ chk.className = 'check ok'; r.textContent = 'AGENT IS DRAWING…'; return; }
+      if (S.slotOpenLeft > 0){ chk.className = 'check ok'; r.textContent = 'SLOT OPEN — DRAW NOW'; }
+      else { chk.className = 'check warn'; r.textContent = 'OPENS IN ' + S.slotIn + 's'; }
+    }
+    setInterval(function(){
+      if (!S.drawing){
+        if (S.slotOpenLeft > 0){
+          S.slotOpenLeft--;
+          if (S.slotOpenLeft === 0) S.slotIn = 90;
+        } else {
+          S.slotIn--;
+          if (S.slotIn <= 0){
+            S.slotOpenLeft = 10;
+            pushTicker('the <b>free slot is OPEN</b> — next pencil in line draws free');
+            if (S.pendingFree){ S.pendingFree = false; beginDraw(false); }
+          }
+        }
+      }
+      slotUI();
+    }, 1000);
+    slotUI();
+
+    /* ---------- the stage ---------- */
+    var stage = $('stage'), sctx = stage.getContext('2d');
+    var CELL = 20; /* 640 / 32 */
+    function drawPaper(){
+      sctx.fillStyle = '#FDFBF3'; sctx.fillRect(0,0,640,640);
+      sctx.strokeStyle = 'rgba(27,25,48,.07)'; sctx.lineWidth = 1;
+      for (var i=0;i<=640;i+=CELL){ sctx.beginPath(); sctx.moveTo(i,0); sctx.lineTo(i,640); sctx.stroke(); sctx.beginPath(); sctx.moveTo(0,i); sctx.lineTo(640,i); sctx.stroke(); }
+      sctx.strokeStyle = 'rgba(27,25,48,.35)'; sctx.lineWidth = 3; sctx.setLineDash([10,8]);
+      sctx.strokeRect(70,70,500,500); sctx.setLineDash([]);
+      sctx.fillStyle = 'rgba(27,25,48,.4)'; sctx.font = '16px "Press Start 2P", monospace'; sctx.textAlign = 'center';
+      sctx.fillText('BLANK PAGE', 320, 306);
+      sctx.font = '11px "Space Mono", monospace';
+      sctx.fillText('press start — the agent does the rest', 320, 336);
+    }
+    drawPaper();
+
+    function drawArtBackground(art){
+      var off = document.createElement('canvas');
+      renderMap(off, art.map.map(function(){ return '................'; }), art.pal, art.bg, art.pattern, art.pat, 1);
+      sctx.imageSmoothingEnabled = false;
+      sctx.drawImage(off, 0, 0, 640, 640);
+    }
+    function setStatus(mode, text){
+      var chip = $('statusChip');
+      chip.className = 'status-chip' + (mode==='draw' ? ' on' : mode==='done' ? ' on done' : '');
+      $('statusText').textContent = text;
+    }
+    function rollTier(instant){
+      if (!instant) return Math.random() < 0.70 ? 'DOODLE' : 'PIXEL';
+      var r = Math.random() * 100, acc = 0, order = ['DOODLE','PIXEL','NEON','RARE','GLITCH','GOLD FOIL','MASTERPIECE'];
+      for (var i=0;i<order.length;i++){ acc += TIERS[order[i]].odds; if (r < acc) return order[i]; }
+      return 'DOODLE';
+    }
+    function pickArt(tier){
+      var pool = ARTS.map(function(a,i){ return {a:a,i:i}; }).filter(function(o){ return o.a.tier === tier; });
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+
+    function beginDraw(instant){
+      if (S.drawing) return;
+      var tier;
+      if (S.style !== 'AUTO'){
+        if (!instant && (S.style === 'NEON' || S.style === 'GLITCH')){
+          toast('Free draws cap at <b>PIXEL</b> tier — NEON / GLITCH are Instant only. Rolling AUTO.');
+          tier = rollTier(false);
+        } else tier = S.style;
+      } else tier = rollTier(instant);
+      var picked = pickArt(tier), art = picked.a;
+      S.drawing = true; S.lastArt = art;
+      $('revealBanner').className = 'reveal-banner';
+      document.querySelector('.canvas-frame').classList.remove('rare-frame');
+      $('startBtn').disabled = true; $('instantBtn').disabled = true; $('studioInstantBtn').disabled = true;
+      setStatus('draw', 'STATUS: DRAWING');
+      $('pieceChip').textContent = 'NOW DRAWING — ' + art.name + ' (TIER ROLLING…)';
+      $('roTier').textContent = '?'; $('roTier').style.color = '';
+      /* palette */
+      var seen = {}, swHtml = '<span class="k">PALETTE</span>';
+      Object.keys(art.pal).forEach(function(k){ if (!seen[art.pal[k]]){ seen[art.pal[k]] = 1; swHtml += '<span class="sw" style="background:'+art.pal[k]+'"></span>'; } });
+      $('paletteRow').innerHTML = swHtml;
+      /* cells to draw */
+      drawArtBackground(art);
+      var cells = [];
+      art.map.forEach(function(row, y){
+        for (var x=0;x<row.length;x++){ var col = art.pal[row[x]]; if (col) cells.push({x:x, y:y, c:col}); }
+      });
+      for (var i=cells.length-1;i>0;i--){ var j = Math.floor(Math.random()*(i+1)); var tmp = cells[i]; cells[i]=cells[j]; cells[j]=tmp; }
+      var total = cells.length, dur = instant ? 3200 : 6000, start = null, drawnCells = 0, glitchAt = 0;
+      var cursor = $('cellCursor'), holder = stage.parentElement;
+      cursor.style.display = 'block';
+      function frame(ts){
+        if (!start) start = ts;
+        var p = Math.min(1, (ts - start) / dur);
+        var target = Math.floor(p * total);
+        while (drawnCells < target){
+          var cell = cells[drawnCells++];
+          sctx.fillStyle = cell.c;
+          sctx.fillRect(cell.x*2*CELL, cell.y*2*CELL, CELL*2, CELL*2);
+          var cw = holder.clientWidth / 16;
+          cursor.style.width = cw + 'px'; cursor.style.height = cw + 'px';
+          cursor.style.left = (cell.x * cw) + 'px'; cursor.style.top = (cell.y * cw) + 'px';
+        }
+        if (art.tier === 'GLITCH' && ts - glitchAt > 420 && p < 0.95){
+          glitchAt = ts;
+          stage.style.transform = 'translate(' + (Math.random()*6-3) + 'px,' + (Math.random()*4-2) + 'px)';
+          setTimeout(function(){ stage.style.transform = ''; }, 70);
+        }
+        $('roProgress').textContent = Math.round(p*100) + '%';
+        $('roPixels').innerHTML = fmt(drawnCells*4) + '<span style="color:#9B95C4;font-size:12px"> / 1,024</span>';
+        $('roEta').textContent = p >= 1 ? '0.0s' : (((dur - (ts-start))/1000).toFixed(1) + 's');
+        if (p < 1) requestAnimationFrame(frame); else finishDraw(art, instant);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function finishDraw(art, instant){
+      S.drawing = false;
+      $('cellCursor').style.display = 'none';
+      var fee = priceWei(); /* the price in force for THIS draw, before the counter moves */
+      S.drawn++;
+      if (instant){ S.instant++; S.burned += 5000; S.dividends += fee * 0.3 / 1e18; }
+      else { S.free++; if (S.addr){ var k = S.addr.toLowerCase(); S.freeCountBy[k] = (S.freeCountBy[k] || 0) + 1; } S.freeCount = myFreeCount(); S.slotIn = 90; S.slotOpenLeft = 0; }
+      var no = S.drawn;
+      var mine = { art: ARTS.indexOf(art), artObj: art, name: art.name, tier: art.tier, no: no, via: instant ? 'INSTANT' : 'FREE' };
+      S.myDraws.unshift(mine);
+      lastDraws.unshift({ who:'YOU', art: mine.art, no: no, via: mine.via });
+      setStatus('done', 'STATUS: DONE — MINTED');
+      $('pieceChip').textContent = 'PIECE #' + no + ' — ' + art.name;
+      var ro = $('roTier'); ro.textContent = art.tier; ro.style.color = TIERS[art.tier].color === '#d99a00' ? '#FFC91F' : TIERS[art.tier].color;
+      $('roProgress').textContent = '100%';
+      var banner = $('revealBanner');
+      banner.innerHTML = 'DRAW #' + no + ' COMPLETE<br>' + art.name + ' — ' + art.tier + ' &bull; WEIGHT x' + TIERS[art.tier].w + '<br>+1,000 $DRAW';
+      banner.className = 'reveal-banner show' + (art.tier === 'RARE' ? ' rare-banner' : '');
+      document.querySelector('.canvas-frame').classList.toggle('rare-frame', art.tier === 'RARE');
+      var prompt = $('promptInput').value.trim();
+      $('queueNote').innerHTML = instant
+        ? 'Instant draw minted as <b>#' + no + '</b>. Your earlier pieces earn from every Instant Draw after this one.'
+        : 'Free draw minted as <b>#' + no + '</b>' + (prompt ? ' — the agent ran with your idea: “' + prompt.replace(/</g,'&lt;') + '”.' : '.') + ' That is free draw <b>' + S.freeCount + ' of 2</b> for this wallet' + (freeLimitReached() ? ' — limit reached (max 2 per wallet). Instant Draw is still open.' : ' — <b>' + (FREE_MAX - S.freeCount) + ' free draw left</b> for this wallet; queue again for the next slot.');
+      if (!instant && freeLimitReached()) $('startBtn').innerHTML = 'FREE DRAWS USED — 2 PER WALLET';
+      else if (!instant && S.freeCount === 1) $('startBtn').innerHTML = '&#9654; PRESS START — FREE DRAW (1 LEFT)';
+      $('startBtn').disabled = freeLimitReached();
+      $('instantBtn').disabled = false; $('studioInstantBtn').disabled = false;
+      /* claimable stays 0 in this preview: it would grow only from OTHER wallets' real Instant Draws after launch — your own draw never pays yourself, and no simulated activity is added */
+      renderMyDraws(); renderLastDraws(); updateStats(); slotUI();
+      pushTicker('<b>YOU</b> just drew <b>' + art.name + '</b> — ' + art.tier + ' x' + TIERS[art.tier].w + ' &bull; DRAW #' + no);
+      toast('<b>DRAW #' + no + '</b> minted: ' + art.name + ' (' + art.tier + ', x' + TIERS[art.tier].w + ') + 1,000 $DRAW. See it in MY DRAWS.');
+    }
+
+    /* ---------- draw triggers ---------- */
+    function startFree(){
+      /* FREE PATH — depends ONLY on: verified Agent ID, this wallet's free count (< 2),
+         the FREE pool (1,222) still having room, and the 90s slot queue.
+         It must NEVER be blocked by the Paid pool. */
+      if (S.drawing){ toast('The agent is mid-sketch — one canvas at a time.'); return; }
+      if (freeLimitReached()){ toast('Free draws used for this wallet — <b>max 2 per wallet</b> (you have drawn 2 free). Instant Draw is still open.'); return; }
+      if (S.free >= FREE_SUPPLY){ toast('<b>Free pool sold out</b> — all 1,222 Free Draws are gone. The separate <b>Paid pool (222)</b> is unaffected and stays open.'); return; }
+      if (!S.connected){
+        connectWallet().then(function(ok){ if (ok) toast('Connected. Press <b>PRESS START</b> again — your on-chain Agent ID check decides the free draw.'); });
+        return;
+      }
+      if (S.agentId === null){
+        toast('Verifying your Binance Agent ID on-chain first…');
+        verifyAgentId(S.addr).then(function(holds){
+          if (holds === null){ toast('Could not reach a BNB Chain RPC to verify your Agent ID — <b>Free Draw stays locked</b> until the check succeeds. Instant Draw is open.'); return; }
+          startFree();
+        });
+        return;
+      }
+      if (S.agentId === false){
+        toast('<b>Free Draw locked:</b> the on-chain check found no Binance Agent ID in this wallet. Free draws are for Agent ID holders only — <b>Instant Draw</b> is open to every wallet.');
+        return;
+      }
+      if (S.slotOpenLeft > 0) beginDraw(false);
+      else {
+        S.pendingFree = true;
+        $('startBtn').disabled = true;
+        $('queueNote').innerHTML = 'You are <b>in line</b>. The global free slot opens in <b>' + S.slotIn + 's</b> — the agent starts automatically. Keep this page open.';
+        toast('Queued! Your free slot opens in <b>' + S.slotIn + 's</b>.');
+      }
+    }
+    function startInstant(){
+      /* PAID PATH — by design this depends ONLY on: a connected wallet, the PAID pool
+         (222) still having room, and the canvas not already drawing. It must NEVER check
+         agentId (true/false/null), the wallet's free count, the Free pool, the free-slot
+         queue, or any phase/timer: Paid opens the moment mint opens, Agent ID holders
+         mint Paid too, and used Free Draws never block Paid. */
+      if (S.drawing){ toast('The agent is mid-sketch — one canvas at a time.'); return; }
+      if (S.instant >= PAID_SUPPLY){ toast('<b>Paid pool sold out</b> — all 222 Paid Draws are gone. The separate <b>Free pool (1,222)</b> is unaffected and stays open for Agent ID holders.'); return; }
+      if (!S.connected){ connectWallet().then(function(ok){ if (ok) toast('Connected. Hit <b>INSTANT DRAW</b> again to skip the queue.'); }); return; }
+      beginDraw(true);
+    }
+    $('startBtn').addEventListener('click', startFree);
+    $('instantBtn').addEventListener('click', startInstant);
+    $('studioInstantBtn').addEventListener('click', startInstant);
+
+    /* style chips */
+    $('styleRow').addEventListener('click', function(e){
+      var btn = e.target.closest('[data-style]'); if (!btn) return;
+      this.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('sel'); });
+      btn.classList.add('sel'); S.style = btn.getAttribute('data-style');
+    });
+
+    /* claim */
+    $('claimBtn').addEventListener('click', function(){
+      if (S.claimable <= 0){ toast('Nothing to claim yet — claimable BNB grows when <b>other wallets</b> Instant Draw and you hold weight.'); return; }
+      var amt = fmtBnb(S.claimable); S.claimable = 0; updateStats();
+      toast('Claimed <b>' + amt + ' BNB</b> to ' + shortAddr(S.addr || '0x…') + ' (preview simulation).');
+    });
+
+    /* copy prompts */
+    document.querySelectorAll('[data-copy]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var text = $(btn.getAttribute('data-copy')).textContent.trim();
+        function done(){ toast('Agent prompt copied — paste it to your AI agent and it draws for you.'); }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(function(){ fallback(); });
+        else fallback();
+        function fallback(){
+          var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta);
+          ta.select(); try { document.execCommand('copy'); done(); } catch(e){ toast('Copy failed — long-press the prompt text to copy it manually.'); }
+          document.body.removeChild(ta);
+        }
+      });
+    });
+
+    /* ---------- NO ambient simulation ----------
+       Launch state is honest zero: there is deliberately NO background loop
+       that invents other wallets' draws. Counters (S.drawn / S.free /
+       S.instant), Last Draws and the ticker change ONLY from this visitor's
+       own preview draws in this session (finishDraw). Nothing is persisted:
+       no localStorage / sessionStorage is used, so a refresh returns to 0. */
+
+    renderMyDraws();
+    </script>
+  </body>
+</html>
