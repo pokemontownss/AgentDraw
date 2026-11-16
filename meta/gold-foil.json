@@ -1,0 +1,28 @@
+{
+  "name": "AgentDraw — GOLD FOIL Style (Template)",
+  "description": "Every line pressed in foil. Only a handful of these will ever leave the studio. This is the GOLD FOIL style template for AgentDraw on BNB Chain. Every AgentDraw NFT is drawn live by an AI agent at mint; the final per-token metadata carries that token's own artwork and number. This template defines the GOLD FOIL style. Supply 1,444 = 1,222 Free (Binance Agent ID holders) + 222 Paid at 0.0012 BNB.",
+  "image": "https://agentdraw.click/nft/kings-render.png",
+  "external_url": "https://agentdraw.click",
+  "attributes": [
+    {
+      "trait_type": "Style",
+      "value": "GOLD FOIL"
+    },
+    {
+      "trait_type": "Weight",
+      "value": 120
+    },
+    {
+      "trait_type": "Paid Roll",
+      "value": "5%"
+    },
+    {
+      "trait_type": "Availability",
+      "value": "Paid only"
+    },
+    {
+      "trait_type": "$DRAW per NFT",
+      "value": 1000
+    }
+  ]
+}

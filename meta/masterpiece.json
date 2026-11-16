@@ -1,0 +1,28 @@
+{
+  "name": "AgentDraw — MASTERPIECE Style (Template)",
+  "description": "The agent’s once-in-a-hundred-draws flow state. Gallery centrepiece. This is the MASTERPIECE style template for AgentDraw on BNB Chain. Every AgentDraw NFT is drawn live by an AI agent at mint; the final per-token metadata carries that token's own artwork and number. This template defines the MASTERPIECE style. Supply 1,444 = 1,222 Free (Binance Agent ID holders) + 222 Paid at 0.0012 BNB.",
+  "image": "https://agentdraw.click/nft/the-first-star.png",
+  "external_url": "https://agentdraw.click",
+  "attributes": [
+    {
+      "trait_type": "Style",
+      "value": "MASTERPIECE"
+    },
+    {
+      "trait_type": "Weight",
+      "value": 400
+    },
+    {
+      "trait_type": "Paid Roll",
+      "value": "1%"
+    },
+    {
+      "trait_type": "Availability",
+      "value": "Paid only"
+    },
+    {
+      "trait_type": "$DRAW per NFT",
+      "value": 1000
+    }
+  ]
+}
