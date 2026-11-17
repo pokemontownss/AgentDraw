@@ -310,6 +310,40 @@ async function sendTx(label, fn) {
   } catch (e) { log(label + " failed: " + errText(e), "err"); return false; }
 }
 
+/* Withdraw with pre-flight checks (mirrors the hardened SpoxyFun / Volta Gent
+   deploy pages): nothing is sent until the contract is loaded, the connected
+   wallet is the owner, the balance is non-zero and withdraw() simulates OK. */
+async function withdraw() {
+  if (!contract || !contractAddress) { log("Withdraw blocked: no contract is loaded yet. Deploy in step 02 or load the existing contract first. No transaction was sent.", "err"); return; }
+  if (!signer || !account) { log("Withdraw blocked: connect the owner wallet first (step 01). No transaction was sent.", "err"); return; }
+  $("btnWithdraw").disabled = true;
+  try {
+    let owner;
+    try { owner = await contract.owner(); }
+    catch (e) { log("Withdraw blocked: could not read the contract owner — " + errText(e) + ". No transaction was sent.", "err"); return; }
+    if (owner.toLowerCase() !== account.toLowerCase()) {
+      log("Withdraw blocked: connected wallet " + short(account) + " is NOT the contract owner (" + short(owner) + "). Connect the owner wallet and try again. No transaction was sent.", "err");
+      return;
+    }
+    let bal;
+    try { bal = await provider.getBalance(contractAddress); }
+    catch (e) { log("Withdraw blocked: could not read the contract balance — " + errText(e) + ". No transaction was sent.", "err"); return; }
+    if (bal === 0n) { log("Withdraw blocked: contract balance is 0 BNB — there is nothing to withdraw. No transaction was sent.", "err"); return; }
+    const balText = ethers.formatEther(bal) + " BNB";
+    try { await contract.connect(signer).withdraw.staticCall(); }
+    catch (e) { log("Withdraw blocked: the withdraw() simulation failed, so the real transaction would revert too. No transaction was sent. Reason: " + errText(e), "err"); return; }
+    log("Pre-checks passed: owner ✓ · contract balance " + balText + " · withdraw() simulation ✓.");
+    log("Withdraw ALL fees to owner — confirm in your wallet…");
+    const tx = await contract.connect(signer).withdraw();
+    log('Withdraw tx sent: <a href="' + txLink(tx.hash) + '" target="_blank" rel="noopener">' + tx.hash + '</a> — withdrawing ' + balText + " to the owner wallet " + account + ". Waiting for confirmation…");
+    await tx.wait();
+    await refreshSummary();
+    const post = await provider.getBalance(contractAddress);
+    log("Withdraw confirmed. Contract balance now: " + ethers.formatEther(post) + " BNB.", "good");
+  } catch (e) { log("Withdraw failed: " + errText(e), "err"); }
+  finally { refreshOwnerButtons(); }
+}
+
 async function deploy() {
   if (!signer) { log("Connect your wallet first.", "err"); return; }
   const uri = $("deployBaseUri").value.trim();
@@ -361,7 +395,7 @@ $("btnSetBase").addEventListener("click", () => {
 $("btnOpen").addEventListener("click", () => sendTx("Open mint (Free + Paid together)", () => contract.connect(signer).setMintOpen(true)));
 $("btnClose").addEventListener("click", () => sendTx("Close mint", () => contract.connect(signer).setMintOpen(false)));
 $("btnCheckAgent").addEventListener("click", checkAgent);
-$("btnWithdraw").addEventListener("click", () => sendTx("Withdraw ALL fees to owner", () => contract.connect(signer).withdraw()));
+$("btnWithdraw").addEventListener("click", withdraw);
 $("btnRefresh").addEventListener("click", refreshSummary);
 $("btnRefreshBal").addEventListener("click", refreshSummary);
 
