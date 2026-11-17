@@ -1009,9 +1009,9 @@
       $('boardBody').innerHTML = boardHtml;
     }
 
-    /* ---------- big pulls — empty at launch: nothing drawn yet ---------- */
+    /* ---------- big pulls — neutral placeholder; renderPulls() replaces it after the event scan ---------- */
     $('pullsList').innerHTML = '<div class="pull"><div><div class="nm">NO BIG PULLS YET</div>'
-      + '<div class="mt">No pieces have been drawn yet. Heavy pulls — NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE — will appear here once real draws happen.</div></div></div>';
+      + '<div class="mt">Heavy pulls — NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE — only roll from Instant Draws.</div></div></div>';
 
     /* ---------- gallery wall ---------- */
     function buildGallery(){
@@ -1485,8 +1485,11 @@
     function renderPulls(){
       var heavy = EVENTS.filter(function(ev){ return ev.tier >= 2; }).slice(-4).reverse();
       if (heavy.length === 0){
+        var pullsMsg = EVENTS.length === 0
+          ? 'No pieces have been drawn yet. Heavy pulls — NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE — will appear here once real draws happen.'
+          : EVENTS.length + ' draws in — all DOODLE / PIXEL so far. Heavy pulls (NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE) only roll from Instant Draws.';
         $('pullsList').innerHTML = '<div class="pull"><div><div class="nm">NO BIG PULLS YET</div>'
-          + '<div class="mt">No pieces have been drawn yet. Heavy pulls — NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE — will appear here once real draws happen.</div></div></div>';
+          + '<div class="mt">' + pullsMsg + '</div></div></div>';
         return;
       }
       $('pullsList').innerHTML = heavy.map(function(ev){
