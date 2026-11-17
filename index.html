@@ -470,6 +470,7 @@
             <a class="btn sun" href="#canvas">&#9654; START DRAWING <small>free &bull; agent id &bull; max 2 per wallet</small></a>
             <a class="btn coral" href="#instant">&#9679; INSTANT DRAW — <span class="price-now">0.0012</span> BNB <small>skip the queue &bull; every tier can roll</small></a>
           </div>
+          <p id="mintState" style="font-family:var(--mono);font-size:12.5px;margin:16px 0 0;color:var(--ink-soft)">&#9679; CONTRACT LIVE ON BNB CHAIN — READING MINT STATE…</p>
           <div class="stat-row" role="group" aria-label="Collection stats">
             <div class="stat">
               <div class="k">TOTAL DRAWN</div>
@@ -587,19 +588,19 @@
                 <input class="prompt-in" id="promptInput" type="text" maxlength="60" placeholder="Give the agent an idea… e.g. a cat with a pencil hat" aria-label="Drawing idea prompt" />
                 <button class="btn sun" id="startBtn" type="button" style="margin-bottom:12px">&#9654; PRESS START — FREE DRAW</button>
                 <button class="btn coral" id="studioInstantBtn" type="button">&#9679; INSTANT DRAW — <span class="price-now">0.0012</span> BNB</button>
-                <p class="queue-note" style="margin-top:10px">PREVIEW STUDIO — contract coming soon: until launch, draws run as an in-page simulation and <b>no BNB moves</b>. Wallet + Agent ID checks above are already real on-chain reads.</p>
+                <p class="queue-note" style="margin-top:10px">LIVE STUDIO — every draw here is a <b>real transaction</b> on the AgentDraw contract (<a href="https://bscscan.com/address/0xe99e7e6fb0eE9058bf93E96Cfc3010C2E4dEf356" target="_blank" rel="noopener">0xe99e…f356</a>) on BNB Chain. Free Draw sends <b>0 BNB</b> (gas only); Instant Draw sends exactly the price shown. Wallet + Agent ID checks above are real on-chain reads.</p>
                 <p class="queue-note" id="queueNote">Free draws are capped at <b>DOODLE / PIXEL</b> tiers and <b>max 2 per wallet</b>, from the <b>1,222 Free pool</b> only. The queue is global — when the slot opens, the next pencil in line draws. Paid draws use the separate 222 pool and never wait for this queue.</p>
               </div>
             </div>
             <div class="agent-cards">
               <div class="agent-card">
                 <h4 class="free">&#9654; SEND YOUR OWN AGENT — FREE</h4>
-                <p id="promptFree">Draw for me on AgentDraw (agentdraw.click) on BNB Chain: call freeDraw() — 0 BNB, needs my Binance Agent ID, max 2 per wallet, then return my DRAW number and tx link.</p>
+                <p id="promptFree">Draw for me on AgentDraw (agentdraw.click) on BNB Chain: call freeDraw() on the AgentDraw contract 0xe99e7e6fb0eE9058bf93E96Cfc3010C2E4dEf356 — 0 BNB, needs my Binance Agent ID, max 2 per wallet, then return my DRAW number and tx link.</p>
                 <button class="btn small teal" type="button" data-copy="promptFree">COPY PROMPT</button>
               </div>
               <div class="agent-card">
                 <h4 class="paid">&#9679; SEND YOUR OWN AGENT — INSTANT (PAID)</h4>
-                <p id="promptPaid">Draw instantly for me on AgentDraw (agentdraw.click) on BNB Chain: call instantDraw() with exactly <span class="price-now">0.0012</span> BNB (<span class="wei-now">1200000000000000</span> wei), then return my DRAW number, its tier, and tx link.</p>
+                <p id="promptPaid">Draw instantly for me on AgentDraw (agentdraw.click) on BNB Chain: call instantDraw() on the AgentDraw contract 0xe99e7e6fb0eE9058bf93E96Cfc3010C2E4dEf356 with exactly <span class="price-now">0.0012</span> BNB (<span class="wei-now">1200000000000000</span> wei), then return my DRAW number, its tier, and tx link.</p>
                 <p style="color:var(--ink)">This prompt is the <b>agent-mint path for Paid</b>: your AI agent — including an agent holding a Binance Agent ID — can mint Paid for your wallet in this one call. An Agent ID is <b>NOT required</b> for Paid, but Agent ID holders are fully accepted, and using your Free Draw never blocks Paid.</p>
                 <button class="btn small coral" type="button" data-copy="promptPaid">COPY PROMPT</button>
               </div>
@@ -618,7 +619,7 @@
               <div class="price-card">
                 <div class="px" style="font-size:9px;color:var(--ink-soft)">PRICE PER DRAW</div>
                 <div class="big"><span class="price-now">0.0012</span> <small>BNB</small></div>
-                <div class="mono" style="font-size:11.5px;color:var(--coral-d);margin:2px 0 4px">PREVIEW — CONTRACT COMING SOON &bull; IN-PAGE SIMULATION, NO BNB MOVES YET</div>
+                <div class="mono" id="mintStateLine" style="font-size:11.5px;color:var(--coral-d);margin:2px 0 4px">CONTRACT LIVE ON BNB CHAIN — READING MINT STATE…</div>
                 <div class="kv"><span>Draws</span><b>1&times; full piece</b></div>
                 <div class="kv"><span>You receive</span><b>1 NFT + 1,000 $DRAW</b></div>
                 <div class="kv"><span>Paid pool</span><b>222 ONLY — separate pool</b></div>
@@ -692,7 +693,7 @@
       <section id="gallery">
         <div class="wrap">
           <div class="sec-head"><span class="no">STAGE 4</span><h2>HALL OF DRAW</h2></div>
-          <p class="sec-sub">The gallery wall — studio totals at launch (all zero: nothing has been drawn yet), plus style samples showing every tier the agent can draw. Samples are examples only — they are not minted NFTs.</p>
+          <p class="sec-sub">The gallery wall — live totals read straight from the AgentDraw contract, plus style samples showing every tier the agent can draw. Samples are examples only — they are not minted NFTs.</p>
           <div class="hall-stats">
             <div class="stat"><div class="k">TOTAL DRAWN</div><div class="v coral" id="hsDrawn">0</div><div class="s">of 1,444</div></div>
             <div class="stat"><div class="k">FREE DRAWS</div><div class="v teal" id="hsFree">0</div><div class="s">of 1,222 Free pool</div></div>
@@ -773,7 +774,7 @@
             </details>
             <details class="faq-item">
               <summary>WHAT ARE THE RISKS?<span class="pl">+</span></summary>
-              <div class="a">This is an experimental on-chain art game, not an investment. $DRAW and the NFTs can go to zero, dividend flow depends on future Instant Draws actually happening, and the price steps up as supply drains — none of that is a promise of profit. The contract is not deployed yet (see footer); only ever interact with addresses published on agentdraw.click. Never spend BNB you cannot afford to lose.</div>
+              <div class="a">This is an experimental on-chain art game, not an investment. $DRAW and the NFTs can go to zero, dividend flow depends on future Instant Draws actually happening, and the price steps up as supply drains — none of that is a promise of profit. The contract is live on BNB Chain (see footer for its address); only ever interact with addresses published on agentdraw.click. Never spend BNB you cannot afford to lose.</div>
             </details>
           </div>
         </div>
@@ -792,13 +793,13 @@
             </span>
           </a>
           <div class="foot-meta">
-            <span class="contract">CONTRACT: COMING SOON — address announced here at launch</span>
+            <span class="contract">CONTRACT: LIVE ON BNB CHAIN — <a href="https://bscscan.com/address/0xe99e7e6fb0eE9058bf93E96Cfc3010C2E4dEf356" target="_blank" rel="noopener" style="color:var(--sun)">0xe99e…f356</a></span>
             <span>SITE: <a href="https://agentdraw.click" style="color:var(--sun)">agentdraw.click</a> &bull; CHAIN: BNB CHAIN &bull; SUPPLY: 1,444 = FREE 1,222 + PAID 222</span>
             <span>Follow on X: <a href="https://x.com/PixelDrawAgent" target="_blank" rel="noopener" style="color:var(--sun)">@PixelDrawAgent</a></span>
             <span>EVERY DRAW = 1 NFT + 1,000 $DRAW</span>
           </div>
         </div>
-        <p class="disclaimer">AgentDraw is an experimental pixel-art game. Nothing on this page is financial advice. Token and NFT values can fall to zero, holder dividends depend entirely on future Instant Draw volume, and the smart contract is not yet deployed — this page is a playable preview of the studio experience. Verify every address on agentdraw.click before sending funds.</p>
+        <p class="disclaimer">AgentDraw is an experimental pixel-art game. Nothing on this page is financial advice. Token and NFT values can fall to zero, holder dividends depend entirely on future Instant Draw volume. The smart contract is live on BNB Chain at 0xe99e7e6fb0eE9058bf93E96Cfc3010C2E4dEf356 — verify every address on BscScan and agentdraw.click before sending funds.</p>
       </div>
     </footer>
 
@@ -999,7 +1000,7 @@
     /* ---------- leaderboard — empty at launch: no draws yet ---------- */
     var BOARD = [];
     if (BOARD.length === 0){
-      $('boardBody').innerHTML = '<tr><td colspan="4" style="text-align:left;color:#CFC9EC">No draws yet — the board is open. The first sketchbooks land here at launch.</td></tr>';
+      $('boardBody').innerHTML = '<tr><td colspan="4" style="text-align:left;color:#CFC9EC">No draws yet — the board is open. The first sketchbooks land here.</td></tr>';
     } else {
       var boardHtml = '';
       BOARD.forEach(function(b, i){
@@ -1046,7 +1047,7 @@
     <script>
     'use strict';
     /* ============================================================
-       AGENTDRAW studio simulation — consistent in-page state.
+       AGENTDRAW studio — live on-chain state, read from the AgentDraw contract.
        ============================================================ */
     var SUPPLY = 1444;
     var FREE_SUPPLY = 1222;
@@ -1054,8 +1055,21 @@
     var FREE_MAX = 2; /* max Free Draws per wallet */
     /* price ladder, in wei so every label stays exact: 0.0012 BNB, +0.0003 BNB per 500-draw step */
     var BASE_WEI = 1200000000000000, STEP_WEI = 300000000000000;
-    function priceWei(){ var st = Math.floor(S.drawn / 500); return BASE_WEI + st * STEP_WEI; } /* drawn 0 -> 0.0012 BNB; +0.0003 BNB at each 500-draw step (500, 1000, ...) */
-    function nextStepAt(){ return (Math.floor(S.drawn / 500) + 1) * 500; }
+
+    /* ---------- the live contract — single source of truth for every counter ---------- */
+    var CONTRACT = '0xe99e7e6fb0eE9058bf93E96Cfc3010C2E4dEf356'; /* AgentDraw (DRAW), BNB Chain */
+    var CONTRACT_SHORT = '0xe99e…f356';
+    var DEPLOY_BLOCK = 134059575; /* creation block (tx 0x283f…6596) — DrawMinted scans start here */
+    var DRAW_TOPIC = '0x8b7792f5cb923fda8c6a4244f6ca64fe93e270f85e2a404d6a10e06e95e46374'; /* DrawMinted(address,uint256,uint8,uint8) */
+    var SEL = { mintOpen:'0x24bbd049', totalMinted:'0xa2309ff8', freeMinted:'0xd10a1a2b', paidMinted:'0x2806b8fb',
+      currentPrice:'0x9d1b464a', freeCooldown:'0x4e5d5938', freeCountBy:'0x789a097b',
+      freeDraw:'0xaac4a95f', instantDraw:'0x0a3dc990' };
+    var TIER_NAMES = ['DOODLE','PIXEL','NEON','RARE','GLITCH','GOLD FOIL','MASTERPIECE']; /* contract Tier enum 0..6 */
+    var EVENTS = []; /* real DrawMinted events, ascending by tokenId — filled by scanEvents() */
+    var C = { loaded:false, err:false, mintOpen:false, total:0, free:0, paid:0, priceNum:BASE_WEI, cooldown:0, cooldownLocal:0 };
+    function priceWei(){ return C.priceNum; } /* live currentPrice() read from the contract */
+    function priceForIndex(idx){ return BASE_WEI + Math.floor(idx / 500) * STEP_WEI; } /* price in force when totalMinted was idx (0-based) */
+    function nextStepAt(){ return (Math.floor(C.total / 500) + 1) * 500; }
     function fmtPrice(wei){ return (wei / 1e18).toFixed(4); }
     var BOARD_WEIGHT = 0; /* launch state: no board, no circulating weight yet */
     var S = {
@@ -1079,7 +1093,7 @@
 
     /* ---------- ticker ---------- */
     var tickerPool = [
-      'mint counter at zero — <b>0 / 1,444 drawn</b> — be the first to draw',
+      'live from the chain — <b>counters read straight from the contract</b>',
       'the studio is live — <b>one free slot every 90 seconds</b>, worldwide',
       'supply: <b>1,222 FREE</b> for Binance Agent ID holders + <b>222 PAID</b> at 0.0012 BNB — both pools open at launch, no phases',
       'every Instant Draw burns <b>50%</b> into $DRAW buyback &amp; burn',
@@ -1092,18 +1106,19 @@
     showTicker();
     setInterval(function(){ tickerIdx++; showTicker(); }, 4600);
 
-    /* ---------- last draws ---------- */
-    var lastDraws = []; /* launch state: no draws yet — fills only from this session's own draws */
+    /* ---------- last draws — real DrawMinted events, newest first ---------- */
     function renderLastDraws(){
-      if (lastDraws.length === 0){
+      if (EVENTS.length === 0){
         $('lastDrawsList').innerHTML = '<li><span style="color:#CFC9EC">No draws yet — be the first.</span></li>';
         return;
       }
-      $('lastDrawsList').innerHTML = lastDraws.slice(0,6).map(function(d){
-        var a = ARTS[d.art];
-        var chip = a.tier === 'RARE' ? '<span class="tier-chip rare-badge">'+a.tier+' x'+TIERS[a.tier].w+'</span>'
-                                     : '<span class="tier-chip" style="color:'+TIERS[a.tier].color+'">'+a.tier+' x'+TIERS[a.tier].w+'</span>';
-        return '<li><span><b style="color:var(--sun)">#'+d.no+'</b> '+a.name+' <span style="color:#9B95C4">by '+d.who+' &bull; '+d.via+'</span></span>'
+      var me = (S.connected && S.addr) ? S.addr.toLowerCase() : null;
+      $('lastDrawsList').innerHTML = EVENTS.slice(-6).reverse().map(function(ev){
+        var tName = TIER_NAMES[ev.tier], a = artForToken(tName, ev.tokenId).a;
+        var who = (me && ev.minter.toLowerCase() === me) ? 'YOU' : shortAddr(ev.minter);
+        var chip = tName === 'RARE' ? '<span class="tier-chip rare-badge">'+tName+' x'+TIERS[tName].w+'</span>'
+                                    : '<span class="tier-chip" style="color:'+TIERS[tName].color+'">'+tName+' x'+TIERS[tName].w+'</span>';
+        return '<li><span><b style="color:var(--sun)">#'+ev.tokenId+'</b> '+a.name+' <span style="color:#9B95C4">by '+who+' &bull; '+(ev.kind === 1 ? 'INSTANT' : 'FREE')+'</span></span>'
           + chip + '</li>';
       }).join('');
     }
@@ -1182,13 +1197,27 @@
     function freeLimitReached(){ return myFreeCount() >= FREE_MAX; }
     function refreshFreeUsed(){
       S.freeCount = myFreeCount();
-      if (!S.drawing && !S.pendingFree){
-        var reached = freeLimitReached();
-        $('startBtn').disabled = reached;
-        if (reached) $('startBtn').innerHTML = 'FREE DRAWS USED — 2 PER WALLET';
-        else if (S.freeCount === 1) $('startBtn').innerHTML = '&#9654; PRESS START — FREE DRAW (1 LEFT)';
-        else $('startBtn').innerHTML = '&#9654; PRESS START — FREE DRAW';
+      refreshMintButtons();
+    }
+    /* one place decides every mint button's state: drawing > mint closed > free limit > ready */
+    function refreshMintButtons(){
+      if (S.drawing) return;
+      var sb = $('startBtn');
+      if (!C.mintOpen){
+        sb.disabled = true; sb.innerHTML = 'MINT NOT OPEN YET';
+      } else if (freeLimitReached()){
+        sb.disabled = true; sb.innerHTML = 'FREE DRAWS USED — 2 PER WALLET';
+      } else if (S.pendingFree){
+        sb.disabled = true;
+      } else {
+        sb.disabled = false;
+        sb.innerHTML = S.freeCount === 1 ? '&#9654; PRESS START — FREE DRAW (1 LEFT)' : '&#9654; PRESS START — FREE DRAW';
       }
+      ['instantBtn','studioInstantBtn'].forEach(function(id){
+        var b = $(id); if (!b) return;
+        if (!C.mintOpen){ b.disabled = true; b.innerHTML = '&#9679; MINT NOT OPEN YET'; }
+        else { b.disabled = false; b.innerHTML = '&#9679; INSTANT DRAW — <span class="price-now">' + fmtPrice(priceWei()) + '</span> BNB'; }
+      });
     }
     function setConnected(addr){
       S.connected = true; S.addr = addr;
@@ -1198,6 +1227,8 @@
       $('chkWalletR').textContent = 'CONNECTED ' + shortAddr(addr);
       refreshFreeUsed();
       verifyAgentId(addr);
+      refreshWalletChain();
+      syncMyDraws();
     }
     function setDisconnected(){
       S.connected = false; S.addr = null; S.agentId = null; S.pendingFree = false;
@@ -1207,6 +1238,8 @@
       $('chkWalletR').textContent = 'NOT CONNECTED';
       agentUI('idle');
       refreshFreeUsed();
+      syncMyDraws();
+      renderLastDraws();
     }
     function connectWallet(){
       if (S.connected) { toast('Wallet already connected: <b>' + shortAddr(S.addr) + '</b>'); return Promise.resolve(true); }
@@ -1308,6 +1341,161 @@
       });
     }
 
+    /* ---------- generic chain reads — public BSC RPC, no wallet needed ---------- */
+    function rpcReq(url, method, params){
+      var ctrl = ('AbortController' in window) ? new AbortController() : null;
+      var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, 12000) : null;
+      return fetch(url, { method:'POST', headers:{ 'Content-Type':'application/json' },
+        signal: ctrl ? ctrl.signal : undefined,
+        body: JSON.stringify({ jsonrpc:'2.0', id:1, method:method, params:params })
+      }).then(function(r){ return r.json(); }).then(function(j){
+        if (timer) clearTimeout(timer);
+        if (!j || j.error) throw new Error((j && j.error && j.error.message) || 'RPC error');
+        return j.result;
+      });
+    }
+    function rpcTry(method, params){
+      var p = Promise.reject(new Error('init'));
+      BSC_RPCS.forEach(function(u){ p = p.catch(function(){ return rpcReq(u, method, params); }); });
+      return p;
+    }
+    function chainCall(data){ return rpcTry('eth_call', [{ to:CONTRACT, data:data }, 'latest']); }
+    function callUint(sel, argHex){
+      return chainCall(argHex ? sel + argHex : sel).then(function(res){
+        if (!res || res === '0x') throw new Error('empty result');
+        return BigInt(res);
+      });
+    }
+    function addrArg(a){ return a.replace(/^0x/i, '').toLowerCase().padStart(64, '0'); }
+
+    /* ---------- live chain state ---------- */
+    function applyMintState(){
+      var ms = $('mintState'), line = $('mintStateLine');
+      if (!C.loaded){
+        if (ms) ms.innerHTML = C.err
+          ? '&#9679; CONTRACT LIVE ON BNB CHAIN — <b>COULD NOT REACH THE CHAIN</b> — RETRYING'
+          : '&#9679; CONTRACT LIVE ON BNB CHAIN — READING MINT STATE…';
+        if (line) line.textContent = C.err ? 'CONTRACT LIVE ON BNB CHAIN — CHAIN UNREACHABLE, RETRYING' : 'CONTRACT LIVE ON BNB CHAIN — READING MINT STATE…';
+        return;
+      }
+      if (C.mintOpen){
+        if (ms) ms.innerHTML = '&#9679; <b>MINT OPEN</b> — FREE + PAID POOLS LIVE ON BNB CHAIN';
+        if (line) line.textContent = 'LIVE ON BNB CHAIN — MINT OPEN • FREE + PAID POOLS LIVE';
+      } else {
+        if (ms) ms.innerHTML = '&#9679; CONTRACT LIVE ON BNB CHAIN — <b>MINT NOT OPEN YET</b> — OPENS SOON';
+        if (line) line.textContent = 'LIVE ON BNB CHAIN — MINT NOT OPEN YET • FREE + PAID OPEN TOGETHER';
+      }
+    }
+    function refreshChain(){
+      return Promise.all([
+        callUint(SEL.mintOpen), callUint(SEL.totalMinted), callUint(SEL.freeMinted),
+        callUint(SEL.paidMinted), callUint(SEL.currentPrice), callUint(SEL.freeCooldown)
+      ]).then(function(v){
+        C.loaded = true; C.err = false;
+        C.mintOpen = v[0] > 0n; C.total = Number(v[1]); C.free = Number(v[2]); C.paid = Number(v[3]);
+        C.priceNum = Number(v[4]); C.cooldown = Number(v[5]); C.cooldownLocal = C.cooldown;
+        S.drawn = C.total; S.free = C.free; S.instant = C.paid;
+        tickerPool[0] = 'live from the chain — <b>' + fmt(C.total) + ' / 1,444 drawn</b>' + (C.total === 0 ? ' — be the first to draw' : '');
+        applyMintState(); refreshMintButtons(); updateStats(); slotUI();
+        if (S.connected && S.addr) return refreshWalletChain();
+      }).catch(function(){
+        C.err = true; applyMintState(); slotUI();
+      });
+    }
+    function refreshWalletChain(){
+      if (!S.connected || !S.addr) return Promise.resolve();
+      var me = S.addr;
+      return callUint(SEL.freeCountBy, addrArg(me)).then(function(n){
+        if (S.addr && S.addr.toLowerCase() === me.toLowerCase()){
+          S.freeCountBy[me.toLowerCase()] = Number(n);
+          refreshFreeUsed();
+        }
+      }).catch(function(){ /* keep the last known count */ });
+    }
+
+    /* ---------- DrawMinted event scan — chunked from the deployment block ---------- */
+    function scanEvents(){
+      return rpcTry('eth_blockNumber', []).then(function(headHex){
+        var head = parseInt(headHex, 16), from = DEPLOY_BLOCK, CHUNK = 4000, all = [];
+        function step(){
+          if (from > head) return all;
+          var to = Math.min(head, from + CHUNK - 1);
+          return rpcTry('eth_getLogs', [{ address:CONTRACT, topics:[DRAW_TOPIC], fromBlock:'0x' + from.toString(16), toBlock:'0x' + to.toString(16) }])
+            .then(function(logs){ all = all.concat(logs); from = to + 1; return step(); });
+        }
+        return step();
+      }).then(function(logs){
+        var seen = {}, evs = [];
+        logs.forEach(function(l){
+          var tokenId = parseInt(l.topics[2], 16);
+          if (seen[tokenId]) return; seen[tokenId] = 1;
+          evs.push({ tokenId:tokenId, minter:'0x' + l.topics[1].slice(-40),
+            kind: parseInt(l.data.slice(0, 66), 16), tier: parseInt('0x' + l.data.slice(66, 130), 16),
+            tx: l.transactionHash, block: parseInt(l.blockNumber, 16) });
+        });
+        evs.sort(function(a, b){ return a.tokenId - b.tokenId; });
+        EVENTS = evs;
+        renderEventViews();
+      }).catch(function(){ /* keep the last known events */ });
+    }
+    /* the artwork a token wears is a deterministic function of its on-chain tier + id,
+       so the live reveal and every later render of the same token always agree */
+    function artForToken(tierName, tokenId){
+      var pool = ARTS.map(function(a, i){ return { a:a, i:i }; }).filter(function(o){ return o.a.tier === tierName; });
+      return pool[tokenId % pool.length];
+    }
+    function renderEventViews(){
+      /* Hall derived figures from the real event stream, using the studio's published
+         split: 5,000 $DRAW of every Paid fee is the buyback-and-burn share, and 30% of
+         every Paid fee accrues to holders. A Paid token's fee is the price in force at
+         its mint — tokenId N was minted when totalMinted was N-1. */
+      var burned = 0, divsWei = 0;
+      EVENTS.forEach(function(ev){
+        if (ev.kind === 1){ burned += 5000; divsWei += priceForIndex(ev.tokenId - 1) * 0.3; }
+      });
+      S.burned = burned; S.dividends = divsWei / 1e18;
+      renderLastDraws(); syncMyDraws(); renderBoard(); renderPulls(); updateStats();
+    }
+    function syncMyDraws(){
+      if (!S.connected || !S.addr){ if (S.myDraws.length) { S.myDraws = []; } renderMyDraws(); updateStats(); return; }
+      var me = S.addr.toLowerCase();
+      S.myDraws = EVENTS.filter(function(ev){ return ev.minter.toLowerCase() === me; }).map(function(ev){
+        var tName = TIER_NAMES[ev.tier], pick = artForToken(tName, ev.tokenId);
+        return { art: pick.i, artObj: pick.a, name: pick.a.name, tier: tName, no: ev.tokenId, via: ev.kind === 1 ? 'INSTANT' : 'FREE', tx: ev.tx };
+      }).sort(function(a, b){ return b.no - a.no; });
+      renderMyDraws(); updateStats();
+    }
+    function renderBoard(){
+      if (EVENTS.length === 0){
+        $('boardBody').innerHTML = '<tr><td colspan="4" style="text-align:left;color:#CFC9EC">No draws yet — the board is open. The first sketchbooks land here.</td></tr>';
+        return;
+      }
+      var byWallet = {};
+      EVENTS.forEach(function(ev){
+        var k = ev.minter.toLowerCase();
+        if (!byWallet[k]) byWallet[k] = { tag: shortAddr(ev.minter), draws:0, weight:0 };
+        byWallet[k].draws++; byWallet[k].weight += TIERS[TIER_NAMES[ev.tier]].w;
+      });
+      var rows = Object.keys(byWallet).map(function(k){ return byWallet[k]; })
+        .sort(function(a, b){ return (b.weight - a.weight) || (b.draws - a.draws); }).slice(0, 8);
+      $('boardBody').innerHTML = rows.map(function(b, i){
+        return '<tr><td class="rk">' + (i + 1) + '</td><td>' + b.tag + '</td><td>' + b.draws + '</td><td><b>x' + b.weight + '</b></td></tr>';
+      }).join('');
+    }
+    function renderPulls(){
+      var heavy = EVENTS.filter(function(ev){ return ev.tier >= 2; }).slice(-4).reverse();
+      if (heavy.length === 0){
+        $('pullsList').innerHTML = '<div class="pull"><div><div class="nm">NO BIG PULLS YET</div>'
+          + '<div class="mt">No pieces have been drawn yet. Heavy pulls — NEON, RARE, GLITCH, GOLD FOIL, MASTERPIECE — will appear here once real draws happen.</div></div></div>';
+        return;
+      }
+      $('pullsList').innerHTML = heavy.map(function(ev){
+        var tName = TIER_NAMES[ev.tier], pick = artForToken(tName, ev.tokenId);
+        return '<div class="pull"><div><div class="nm">' + pick.a.name + ' — <span style="color:' + TIERS[tName].color + '">' + tName + '</span></div>'
+          + '<div class="mt">DRAW #' + ev.tokenId + ' &bull; ' + shortAddr(ev.minter) + ' &bull; ' + (ev.kind === 1 ? 'INSTANT' : 'FREE') + ' &bull; WEIGHT x' + TIERS[tName].w + '</div></div></div>';
+      }).join('');
+    }
+
     /* ---------- paste-an-address Agent ID checker ---------- */
     function runAgentCheck(){
       var v = $('acInput').value.trim(), out = $('acResult');
@@ -1337,25 +1525,22 @@
     $('acBtn').addEventListener('click', runAgentCheck);
     $('acInput').addEventListener('keydown', function(e){ if (e.key === 'Enter') runAgentCheck(); });
 
-    /* ---------- free slot clock ---------- */
+    /* ---------- free slot clock — driven by the contract's global 90s cooldown ---------- */
     function slotUI(){
       var chk = $('chkSlot'), r = $('chkSlotR');
       if (S.drawing){ chk.className = 'check ok'; r.textContent = 'AGENT IS DRAWING…'; return; }
-      if (S.slotOpenLeft > 0){ chk.className = 'check ok'; r.textContent = 'SLOT OPEN — DRAW NOW'; }
-      else { chk.className = 'check warn'; r.textContent = 'OPENS IN ' + S.slotIn + 's'; }
+      if (!C.loaded){ chk.className = 'check warn'; r.textContent = C.err ? 'CHAIN UNREACHABLE' : 'READING CHAIN…'; return; }
+      if (C.cooldownLocal > 0){ chk.className = 'check warn'; r.textContent = 'OPENS IN ' + C.cooldownLocal + 's'; }
+      else { chk.className = 'check ok'; r.textContent = 'SLOT OPEN — DRAW NOW'; }
     }
     setInterval(function(){
-      if (!S.drawing){
-        if (S.slotOpenLeft > 0){
-          S.slotOpenLeft--;
-          if (S.slotOpenLeft === 0) S.slotIn = 90;
-        } else {
-          S.slotIn--;
-          if (S.slotIn <= 0){
-            S.slotOpenLeft = 10;
-            pushTicker('the <b>free slot is OPEN</b> — next pencil in line draws free');
-            if (S.pendingFree){ S.pendingFree = false; beginDraw(false); }
-          }
+      if (!S.drawing && C.loaded && C.cooldownLocal > 0){
+        C.cooldownLocal--;
+        if (C.cooldownLocal <= 0){
+          pushTicker('the <b>free slot is OPEN</b> — next pencil in line draws free');
+          refreshChain().then(function(){
+            if (S.pendingFree && C.loaded && C.mintOpen && C.cooldown <= 0){ S.pendingFree = false; startFree(); }
+          });
         }
       }
       slotUI();
@@ -1389,28 +1574,32 @@
       chip.className = 'status-chip' + (mode==='draw' ? ' on' : mode==='done' ? ' on done' : '');
       $('statusText').textContent = text;
     }
-    function rollTier(instant){
-      if (!instant) return Math.random() < 0.70 ? 'DOODLE' : 'PIXEL';
-      var r = Math.random() * 100, acc = 0, order = ['DOODLE','PIXEL','NEON','RARE','GLITCH','GOLD FOIL','MASTERPIECE'];
-      for (var i=0;i<order.length;i++){ acc += TIERS[order[i]].odds; if (r < acc) return order[i]; }
-      return 'DOODLE';
-    }
     function pickArt(tier){
       var pool = ARTS.map(function(a,i){ return {a:a,i:i}; }).filter(function(o){ return o.a.tier === tier; });
       return pool[Math.floor(Math.random()*pool.length)];
     }
+    /* While a real mint tx confirms, the canvas animates a provisional sketch in the
+       requested style. The tier itself is rolled inside the contract transaction —
+       the REVEAL always paints the deterministic art of the tier that actually
+       landed on-chain (artForToken), so the piece you see is the piece you own. */
+    function provisionalTier(instant){
+      if (!instant){
+        if (S.style === 'DOODLE' || S.style === 'PIXEL') return S.style;
+        return Math.random() < 0.70 ? 'DOODLE' : 'PIXEL';
+      }
+      if (S.style !== 'AUTO') return S.style;
+      return TIER_NAMES[Math.floor(Math.random() * TIER_NAMES.length)];
+    }
 
-    function beginDraw(instant){
-      if (S.drawing) return;
-      var tier;
-      if (S.style !== 'AUTO'){
-        if (!instant && (S.style === 'NEON' || S.style === 'GLITCH')){
-          toast('Free draws cap at <b>PIXEL</b> tier — NEON / GLITCH are Instant only. Rolling AUTO.');
-          tier = rollTier(false);
-        } else tier = S.style;
-      } else tier = rollTier(instant);
-      var picked = pickArt(tier), art = picked.a;
-      S.drawing = true; S.lastArt = art;
+    /* ---------- the drawing animation — a provisional sketch while the tx confirms ---------- */
+    var DS = { animDone:false, reveal:null };
+    function beginDrawAnimation(instant){
+      if (!instant && (S.style === 'NEON' || S.style === 'GLITCH')){
+        toast('Free draws cap at <b>PIXEL</b> tier — NEON / GLITCH are Instant only. Rolling AUTO.');
+      }
+      var picked = pickArt(provisionalTier(instant)), art = picked.a;
+      DS.animDone = false; DS.reveal = null;
+      S.lastArt = art;
       $('revealBanner').className = 'reveal-banner';
       document.querySelector('.canvas-frame').classList.remove('rare-frame');
       $('startBtn').disabled = true; $('instantBtn').disabled = true; $('studioInstantBtn').disabled = true;
@@ -1451,56 +1640,161 @@
         $('roProgress').textContent = Math.round(p*100) + '%';
         $('roPixels').innerHTML = fmt(drawnCells*4) + '<span style="color:#9B95C4;font-size:12px"> / 1,024</span>';
         $('roEta').textContent = p >= 1 ? '0.0s' : (((dur - (ts-start))/1000).toFixed(1) + 's');
-        if (p < 1) requestAnimationFrame(frame); else finishDraw(art, instant);
+        if (p < 1) requestAnimationFrame(frame);
+        else {
+          DS.animDone = true;
+          if (DS.reveal) doReveal();
+          else { setStatus('draw', 'STATUS: WAITING FOR CHAIN…'); $('pieceChip').textContent = 'TX SENT — WAITING FOR ON-CHAIN CONFIRMATION'; }
+        }
       }
       requestAnimationFrame(frame);
     }
 
-    function finishDraw(art, instant){
+    function paintFullArt(art){
+      var off = document.createElement('canvas');
+      renderMap(off, art.map, art.pal, art.bg, art.pattern, art.pat, 1);
+      sctx.imageSmoothingEnabled = false;
+      sctx.drawImage(off, 0, 0, 640, 640);
+    }
+    function resetCanvas(){
+      S.drawing = false; DS.reveal = null; DS.animDone = false;
+      $('cellCursor').style.display = 'none';
+      drawPaper();
+      setStatus('', 'STATUS: IDLE');
+      $('pieceChip').textContent = 'CANVAS 32×32 • NO PIECE LOADED';
+      $('roTier').textContent = '?'; $('roTier').style.color = '';
+      $('roProgress').textContent = '0%';
+      $('revealBanner').className = 'reveal-banner';
+      document.querySelector('.canvas-frame').classList.remove('rare-frame');
+      refreshMintButtons(); slotUI();
+    }
+
+    /* ---------- real mint transactions (EIP-1193) ---------- */
+    function ensureWalletChain(){
+      return window.ethereum.request({ method:'eth_chainId' }).then(function(cid){
+        if (cid === '0x38') return true;
+        return window.ethereum.request({ method:'wallet_switchEthereumChain', params:[{ chainId:'0x38' }] })
+          .then(function(){ return true; }, function(){ return false; });
+      }, function(){ return false; });
+    }
+    function getReceipt(hash){
+      if (hasWallet()){
+        return window.ethereum.request({ method:'eth_getTransactionReceipt', params:[hash] })
+          .then(function(r){ return r || rpcTry('eth_getTransactionReceipt', [hash]); })
+          .catch(function(){ return rpcTry('eth_getTransactionReceipt', [hash]); });
+      }
+      return rpcTry('eth_getTransactionReceipt', [hash]);
+    }
+    function waitReceipt(hash){
+      return new Promise(function(resolve){
+        var tries = 0;
+        (function poll(){
+          getReceipt(hash).then(function(r){
+            if (r) return resolve(r);
+            if (++tries > 90) return resolve(null);
+            setTimeout(poll, 2000);
+          }).catch(function(){
+            if (++tries > 90) return resolve(null);
+            setTimeout(poll, 2000);
+          });
+        })();
+      });
+    }
+    function parseDrawEvent(receipt){
+      var logs = receipt.logs || [];
+      for (var i=0;i<logs.length;i++){
+        var l = logs[i];
+        if (l.address && l.address.toLowerCase() === CONTRACT.toLowerCase() && l.topics && l.topics[0] === DRAW_TOPIC){
+          return { tokenId: parseInt(l.topics[2], 16), minter: '0x' + l.topics[1].slice(-40),
+                   kind: parseInt(l.data.slice(0, 66), 16), tier: parseInt('0x' + l.data.slice(66, 130), 16), tx: receipt.transactionHash };
+        }
+      }
+      return null;
+    }
+    function sendDraw(instant){
+      ensureWalletChain().then(function(onBnb){
+        if (!onBnb){ toast('Your wallet is not on <b>BNB Chain</b> — switch networks in your wallet and try again. Nothing was sent.'); return; }
+        return refreshChain().then(function(){
+          if (!C.loaded || !C.mintOpen){ toast('<b>Mint is not open</b> — nothing was sent.'); return; }
+          var priceRead = instant ? callUint(SEL.currentPrice) : Promise.resolve(null);
+          return priceRead.then(function(livePrice){
+            if (instant && C.paid >= PAID_SUPPLY){ toast('<b>Paid pool sold out</b> — all 222 Paid Draws are gone. The separate <b>Free pool (1,222)</b> is unaffected and stays open.'); return; }
+            if (!instant && C.free >= FREE_SUPPLY){ toast('<b>Free pool sold out</b> — all 1,222 Free Draws are gone. The separate <b>Paid pool (222)</b> is unaffected and stays open.'); return; }
+            var value = '0x0', data = SEL.freeDraw;
+            if (instant){ C.priceNum = Number(livePrice); value = '0x' + livePrice.toString(16); data = SEL.instantDraw; updateStats(); }
+            S.drawing = true; S.pendingFree = false;
+            $('startBtn').disabled = true; $('instantBtn').disabled = true; $('studioInstantBtn').disabled = true;
+            setStatus('draw', 'STATUS: SIGNING…');
+            $('pieceChip').textContent = 'WAITING FOR YOUR WALLET — CONFIRM THE ' + (instant ? 'INSTANT DRAW' : 'FREE DRAW');
+            var txHash = null;
+            window.ethereum.request({ method:'eth_sendTransaction', params:[{ from:S.addr, to:CONTRACT, data:data, value:value }] })
+            .then(function(hash){
+              txHash = hash;
+              beginDrawAnimation(instant);
+              return waitReceipt(hash);
+            }).then(function(receipt){
+              if (!receipt){ resetCanvas(); toast('No receipt after waiting — the draw was <b>not confirmed here</b>. Check your wallet or BscScan for the transaction status.'); refreshChain(); return; }
+              if (receipt.status !== '0x1'){ resetCanvas(); toast('<b>Transaction reverted on-chain</b> — no DRAW was minted. <a href="https://bscscan.com/tx/' + txHash + '" target="_blank" rel="noopener" style="color:var(--sun)">View the tx on BscScan</a>'); refreshChain(); return; }
+              var ev = parseDrawEvent(receipt);
+              if (!ev){ resetCanvas(); toast('Transaction confirmed, but no DrawMinted event was found in it — see <a href="https://bscscan.com/tx/' + txHash + '" target="_blank" rel="noopener" style="color:var(--sun)">BscScan</a>.'); refreshChain(); return; }
+              finishDrawReal(ev, instant, txHash);
+            }).catch(function(e){
+              resetCanvas();
+              if (e && e.code === 4001) toast('<b>Transaction rejected</b> in your wallet — nothing was sent, nothing was minted.');
+              else toast('<b>Transaction failed</b> — ' + ((e && e.message) ? String(e.message).replace(/</g,'&lt;').slice(0, 140) : 'unknown error') + '. Nothing was minted.');
+            });
+          });
+        });
+      });
+    }
+    function finishDrawReal(ev, instant, txHash){
+      var tName = TIER_NAMES[ev.tier];
+      var art = artForToken(tName, ev.tokenId).a;
+      DS.reveal = { ev:ev, art:art, instant:instant, txHash:txHash };
+      if (DS.animDone) doReveal();
+      else setStatus('draw', 'STATUS: DRAWING — TX CONFIRMED');
+    }
+    function doReveal(){
+      var r = DS.reveal; if (!r) return; DS.reveal = null;
+      var ev = r.ev, art = r.art, instant = r.instant, no = ev.tokenId, tName = TIER_NAMES[ev.tier];
       S.drawing = false;
       $('cellCursor').style.display = 'none';
-      var fee = priceWei(); /* the price in force for THIS draw, before the counter moves */
-      S.drawn++;
-      if (instant){ S.instant++; S.burned += 5000; S.dividends += fee * 0.3 / 1e18; }
-      else { S.free++; if (S.addr){ var k = S.addr.toLowerCase(); S.freeCountBy[k] = (S.freeCountBy[k] || 0) + 1; } S.freeCount = myFreeCount(); S.slotIn = 90; S.slotOpenLeft = 0; }
-      var no = S.drawn;
-      var mine = { art: ARTS.indexOf(art), artObj: art, name: art.name, tier: art.tier, no: no, via: instant ? 'INSTANT' : 'FREE' };
-      S.myDraws.unshift(mine);
-      lastDraws.unshift({ who:'YOU', art: mine.art, no: no, via: mine.via });
+      paintFullArt(art);
       setStatus('done', 'STATUS: DONE — MINTED');
-      $('pieceChip').textContent = 'PIECE #' + no + ' — ' + art.name;
-      var ro = $('roTier'); ro.textContent = art.tier; ro.style.color = TIERS[art.tier].color === '#d99a00' ? '#FFC91F' : TIERS[art.tier].color;
+      $('pieceChip').textContent = 'DRAW #' + no + ' — ' + art.name;
+      var ro = $('roTier'); ro.textContent = tName; ro.style.color = TIERS[tName].color === '#d99a00' ? '#FFC91F' : TIERS[tName].color;
       $('roProgress').textContent = '100%';
+      $('roPixels').innerHTML = '1,024<span style="color:#9B95C4;font-size:12px"> / 1,024</span>';
+      $('roEta').textContent = '0.0s';
       var banner = $('revealBanner');
-      banner.innerHTML = 'DRAW #' + no + ' COMPLETE<br>' + art.name + ' — ' + art.tier + ' &bull; WEIGHT x' + TIERS[art.tier].w + '<br>+1,000 $DRAW';
-      banner.className = 'reveal-banner show' + (art.tier === 'RARE' ? ' rare-banner' : '');
-      document.querySelector('.canvas-frame').classList.toggle('rare-frame', art.tier === 'RARE');
+      banner.innerHTML = 'DRAW #' + no + ' COMPLETE<br>' + art.name + ' — ' + tName + ' &bull; WEIGHT x' + TIERS[tName].w + '<br>+1,000 $DRAW<br><a href="https://bscscan.com/tx/' + r.txHash + '" target="_blank" rel="noopener" style="color:var(--sun)">VIEW TX ON BSCSCAN</a>';
+      banner.className = 'reveal-banner show' + (tName === 'RARE' ? ' rare-banner' : '');
+      document.querySelector('.canvas-frame').classList.toggle('rare-frame', tName === 'RARE');
       var prompt = $('promptInput').value.trim();
-      $('queueNote').innerHTML = instant
-        ? 'Instant draw minted as <b>#' + no + '</b>. Your earlier pieces earn from every Instant Draw after this one.'
-        : 'Free draw minted as <b>#' + no + '</b>' + (prompt ? ' — the agent ran with your idea: “' + prompt.replace(/</g,'&lt;') + '”.' : '.') + ' That is free draw <b>' + S.freeCount + ' of 2</b> for this wallet' + (freeLimitReached() ? ' — limit reached (max 2 per wallet). Instant Draw is still open.' : ' — <b>' + (FREE_MAX - S.freeCount) + ' free draw left</b> for this wallet; queue again for the next slot.');
-      if (!instant && freeLimitReached()) $('startBtn').innerHTML = 'FREE DRAWS USED — 2 PER WALLET';
-      else if (!instant && S.freeCount === 1) $('startBtn').innerHTML = '&#9654; PRESS START — FREE DRAW (1 LEFT)';
-      $('startBtn').disabled = freeLimitReached();
-      $('instantBtn').disabled = false; $('studioInstantBtn').disabled = false;
-      /* claimable stays 0 in this preview: it would grow only from OTHER wallets' real Instant Draws after launch — your own draw never pays yourself, and no simulated activity is added */
-      renderMyDraws(); renderLastDraws(); updateStats(); slotUI();
-      pushTicker('<b>YOU</b> just drew <b>' + art.name + '</b> — ' + art.tier + ' x' + TIERS[art.tier].w + ' &bull; DRAW #' + no);
-      toast('<b>DRAW #' + no + '</b> minted: ' + art.name + ' (' + art.tier + ', x' + TIERS[art.tier].w + ') + 1,000 $DRAW. See it in MY DRAWS.');
+      $('queueNote').innerHTML = (instant ? 'Instant draw' : 'Free draw') + ' minted on-chain as <b>DRAW #' + no + '</b> (' + tName + ')'
+        + (prompt && !instant ? ' — the agent ran with your idea: &ldquo;' + prompt.replace(/</g,'&lt;') + '&rdquo;.' : '.')
+        + ' <a href="https://bscscan.com/tx/' + r.txHash + '" target="_blank" rel="noopener">View the transaction on BscScan</a>. It is already in MY DRAWS below.';
+      pushTicker('<b>' + shortAddr(S.addr) + '</b> just drew <b>' + art.name + '</b> — ' + tName + ' x' + TIERS[tName].w + ' &bull; DRAW #' + no);
+      toast('<b>DRAW #' + no + '</b> minted on-chain: ' + art.name + ' (' + tName + ', x' + TIERS[tName].w + ') + 1,000 $DRAW. See it in MY DRAWS.');
+      refreshMintButtons(); slotUI();
+      refreshChain(); scanEvents();
     }
 
     /* ---------- draw triggers ---------- */
     function startFree(){
-      /* FREE PATH — depends ONLY on: verified Agent ID, this wallet's free count (< 2),
-         the FREE pool (1,222) still having room, and the 90s slot queue.
-         It must NEVER be blocked by the Paid pool. */
+      /* FREE PATH — a real freeDraw() call on the contract. Depends ONLY on: mint
+         open, a verified Agent ID, this wallet's on-chain free count (< 2), the
+         FREE pool (1,222) still having room, and the contract's global 90-second
+         cooldown. It must NEVER be blocked by the Paid pool. */
       if (S.drawing){ toast('The agent is mid-sketch — one canvas at a time.'); return; }
-      if (freeLimitReached()){ toast('Free draws used for this wallet — <b>max 2 per wallet</b> (you have drawn 2 free). Instant Draw is still open.'); return; }
-      if (S.free >= FREE_SUPPLY){ toast('<b>Free pool sold out</b> — all 1,222 Free Draws are gone. The separate <b>Paid pool (222)</b> is unaffected and stays open.'); return; }
+      if (!C.loaded){ refreshChain(); toast('Reading the chain first — give it a second, then press start again.'); return; }
+      if (!C.mintOpen){ toast('<b>Mint is not open yet.</b> The contract is live on BNB Chain, but the owner has not opened the mint — Free and Paid open together the moment it flips.'); return; }
+      if (C.free >= FREE_SUPPLY){ toast('<b>Free pool sold out</b> — all 1,222 Free Draws are gone. The separate <b>Paid pool (222)</b> is unaffected and stays open.'); return; }
       if (!S.connected){
         connectWallet().then(function(ok){ if (ok) toast('Connected. Press <b>PRESS START</b> again — your on-chain Agent ID check decides the free draw.'); });
         return;
       }
+      if (freeLimitReached()){ toast('Free draws used for this wallet — <b>max 2 per wallet</b> (you have drawn 2 free). Instant Draw is still open.'); return; }
       if (S.agentId === null){
         toast('Verifying your Binance Agent ID on-chain first…');
         verifyAgentId(S.addr).then(function(holds){
@@ -1513,35 +1807,32 @@
         toast('<b>Free Draw locked:</b> the on-chain check found no Binance Agent ID in this wallet. Free draws are for Agent ID holders only — <b>Instant Draw</b> is open to every wallet.');
         return;
       }
-      if (S.slotOpenLeft > 0) beginDraw(false);
-      else {
+      if (C.cooldown > 0){
         S.pendingFree = true;
         $('startBtn').disabled = true;
-        $('queueNote').innerHTML = 'You are <b>in line</b>. The global free slot opens in <b>' + S.slotIn + 's</b> — the agent starts automatically. Keep this page open.';
-        toast('Queued! Your free slot opens in <b>' + S.slotIn + 's</b>.');
+        $('queueNote').innerHTML = 'You are <b>in line</b>. The global free slot opens in <b>' + C.cooldown + 's</b> — the contract enforces one free draw every 90 seconds, worldwide. When it opens, the draw starts and your wallet will ask you to confirm. Keep this page open.';
+        toast('Queued! Your free slot opens in <b>' + C.cooldown + 's</b>.');
+        return;
       }
+      sendDraw(false);
     }
     function startInstant(){
-      /* PAID PATH — by design this depends ONLY on: the PAID pool (222) still having
-         room, and the canvas not already drawing. It must NEVER check agentId
-         (true/false/null), the wallet's free count, the Free pool, the free-slot
-         queue, or any phase/timer: Paid opens the moment mint opens, Agent ID holders
-         mint Paid too, and used Free Draws never block Paid. While the studio is a
-         PREVIEW, a visitor with NO wallet extension runs the in-page simulation
-         directly — no address is invented, nothing is signed, no BNB moves; a wallet
-         that is present but not connected still connects first, exactly as before. */
+      /* PAID PATH — a real instantDraw() call on the contract. Depends ONLY on:
+         mint open and the PAID pool (222) still having room; the exact live price
+         is re-read inside sendDraw at click time. It must NEVER check agentId,
+         the wallet's free count, the Free pool, the free-slot queue, or any
+         phase/timer: Paid opens the moment mint opens, Agent ID holders mint
+         Paid too, and used Free Draws never block Paid. There is no fake-draw mode
+         any more — no wallet means connect first, like every live mint page. */
       if (S.drawing){ toast('The agent is mid-sketch — one canvas at a time.'); return; }
-      if (S.instant >= PAID_SUPPLY){ toast('<b>Paid pool sold out</b> — all 222 Paid Draws are gone. The separate <b>Free pool (1,222)</b> is unaffected and stays open for Agent ID holders.'); return; }
+      if (!C.loaded){ refreshChain(); toast('Reading the chain first — give it a second, then hit INSTANT DRAW again.'); return; }
+      if (!C.mintOpen){ toast('<b>Mint is not open yet.</b> The contract is live on BNB Chain, but the owner has not opened the mint — Free and Paid open together the moment it flips.'); return; }
+      if (C.paid >= PAID_SUPPLY){ toast('<b>Paid pool sold out</b> — all 222 Paid Draws are gone. The separate <b>Free pool (1,222)</b> is unaffected and stays open for Agent ID holders.'); return; }
       if (!S.connected){
-        if (!hasWallet()){
-          toast('<b>Preview mode</b> — no wallet connected. This is an in-page simulation: the agent draws, but no BNB moves and nothing is minted on-chain.');
-          beginDraw(true);
-          return;
-        }
         connectWallet().then(function(ok){ if (ok) toast('Connected. Hit <b>INSTANT DRAW</b> again to skip the queue.'); });
         return;
       }
-      beginDraw(true);
+      sendDraw(true);
     }
     $('startBtn').addEventListener('click', startFree);
     $('instantBtn').addEventListener('click', startInstant);
@@ -1558,7 +1849,7 @@
     $('claimBtn').addEventListener('click', function(){
       if (S.claimable <= 0){ toast('Nothing to claim yet — claimable BNB grows when <b>other wallets</b> Instant Draw and you hold weight.'); return; }
       var amt = fmtBnb(S.claimable); S.claimable = 0; updateStats();
-      toast('Claimed <b>' + amt + ' BNB</b> to ' + shortAddr(S.addr || '0x…') + ' (preview simulation).');
+      toast('Claimed <b>' + amt + ' BNB</b> to ' + shortAddr(S.addr || '0x…') + '.');
     });
 
     /* copy prompts */
@@ -1576,13 +1867,18 @@
       });
     });
 
-    /* ---------- NO ambient simulation ----------
-       Launch state is honest zero: there is deliberately NO background loop
-       that invents other wallets' draws. Counters (S.drawn / S.free /
-       S.instant), Last Draws and the ticker change ONLY from this visitor's
-       own preview draws in this session (finishDraw). Nothing is persisted:
-       no localStorage / sessionStorage is used, so a refresh returns to 0. */
+    /* ---------- NO ambient fake activity ----------
+       There is deliberately NO background loop that invents other wallets'
+       draws. Every counter, Last Draws entry, board row and My Draws piece on
+       this page comes from the live contract: view reads (refreshChain) and
+       real DrawMinted events (scanEvents). Mint history is never persisted:
+       no localStorage / sessionStorage is used for it. */
 
+    /* ---------- live wiring boot ---------- */
+    refreshChain();
+    scanEvents();
+    setInterval(refreshChain, 20000);
+    setInterval(scanEvents, 30000);
     renderMyDraws();
     </script>
 <script>if('serviceWorker' in navigator&&location.hostname==='agentdraw.click'){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})})}</script>
