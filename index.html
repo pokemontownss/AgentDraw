@@ -381,6 +381,14 @@
       #toast b{ color:var(--sun); }
 
       /* ---------- responsive ---------- */
+      @media (min-width:1180px){
+        .head-in{ flex-wrap:nowrap; gap:12px; }
+        .brand{ flex:0 0 auto; }
+        .brand-name{ font-size:15px; }
+        nav.main{ flex-wrap:nowrap; gap:2px; }
+        nav.main a{ padding:12px 7px; white-space:nowrap; flex:0 0 auto; }
+        #connectBtn{ flex:0 0 auto; white-space:nowrap; padding:0 14px; }
+      }
       @media (max-width:1020px){
         .gallery{ grid-template-columns:repeat(3,1fr); }
         .codex{ grid-template-columns:repeat(2,1fr); }
@@ -1514,14 +1522,25 @@
       }
     }
     function startInstant(){
-      /* PAID PATH — by design this depends ONLY on: a connected wallet, the PAID pool
-         (222) still having room, and the canvas not already drawing. It must NEVER check
-         agentId (true/false/null), the wallet's free count, the Free pool, the free-slot
+      /* PAID PATH — by design this depends ONLY on: the PAID pool (222) still having
+         room, and the canvas not already drawing. It must NEVER check agentId
+         (true/false/null), the wallet's free count, the Free pool, the free-slot
          queue, or any phase/timer: Paid opens the moment mint opens, Agent ID holders
-         mint Paid too, and used Free Draws never block Paid. */
+         mint Paid too, and used Free Draws never block Paid. While the studio is a
+         PREVIEW, a visitor with NO wallet extension runs the in-page simulation
+         directly — no address is invented, nothing is signed, no BNB moves; a wallet
+         that is present but not connected still connects first, exactly as before. */
       if (S.drawing){ toast('The agent is mid-sketch — one canvas at a time.'); return; }
       if (S.instant >= PAID_SUPPLY){ toast('<b>Paid pool sold out</b> — all 222 Paid Draws are gone. The separate <b>Free pool (1,222)</b> is unaffected and stays open for Agent ID holders.'); return; }
-      if (!S.connected){ connectWallet().then(function(ok){ if (ok) toast('Connected. Hit <b>INSTANT DRAW</b> again to skip the queue.'); }); return; }
+      if (!S.connected){
+        if (!hasWallet()){
+          toast('<b>Preview mode</b> — no wallet connected. This is an in-page simulation: the agent draws, but no BNB moves and nothing is minted on-chain.');
+          beginDraw(true);
+          return;
+        }
+        connectWallet().then(function(ok){ if (ok) toast('Connected. Hit <b>INSTANT DRAW</b> again to skip the queue.'); });
+        return;
+      }
       beginDraw(true);
     }
     $('startBtn').addEventListener('click', startFree);
